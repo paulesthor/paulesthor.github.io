@@ -125,7 +125,8 @@
 
 /* Sidebar Specifics */
 .project-meta,
-.project-actions {
+.project-actions,
+.project-sidebar {
     background-color: rgba(26, 39, 68, 0.6);
     border-radius: 12px;
     padding: 25px;
@@ -157,13 +158,15 @@
     text-align: right;
 }
 
-.project-actions {
+.project-actions,
+.project-sidebar {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.btn-action {
+.btn-action,
+.download-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,7 +180,8 @@
     text-align: center;
 }
 
-.btn-action.primary {
+.btn-action.primary,
+.download-btn {
     background-color: var(--secondary);
     color: var(--dark);
     box-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
@@ -189,12 +193,14 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.btn-action:hover {
+.btn-action:hover,
+.download-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-.btn-action.primary:hover {
+.btn-action.primary:hover,
+.download-btn:hover {
     background-color: #fff;
 }
 
