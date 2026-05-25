@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets | Esthor Paul</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #4cc9f0;
+            --light: #16213e;
+            --dark: #0f0f1b;
+            --accent: #f72585;
+            --text: #e2e2e2;
+            --gold: #d4a574;
+            --bronze: #b8860b;
+        }
+
+        .logo {
+            text-decoration: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #1a2744;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Canvas */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(26, 26, 46, 0.5);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Section Projets */
+        .projects-hero {
+            padding: 150px 0 50px;
+            text-align: center;
+            background: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .projects-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .projects-hero p {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Grille de projets */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-card {
+            background-color: rgba(26, 39, 68, 0.01);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(76, 201, 240, 0.4);
+            background-color: rgba(26, 39, 68, 0.05);
+        }
+
+        .project-image {
+            display: none;
+        }
+
+        .project-info {
+            padding: 20px;
+        }
+
+        .project-info h3 {
+            margin-top: 0;
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+
+        .project-info p {
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .projects-hero {
+                padding: 150px 0 50px;
+            }
+
+            .projects-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <div class="logo">Paul Esthor</div>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="Apropos.html">À propos</a>
+                    <a href="parcours.html">Mon Parcours</a>
+                    <a href="Projet.html">Projets</a>
+                    <a href="Competences.html">Compétences</a>
+                    <a href="Contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section Hero Projets -->
+        <section class="projects-hero">
+            <div class="container">
+                <h1>Mes Projets</h1>
+                <p>Découvrez mes réalisations en science des données et développement</p>
+            </div>
+        </section>
+
+        <!-- Grille de projets -->
+        <div class="container">
+            <div class="projects-grid">
+                <!-- Projet 1 -->
+                <a href="projet1.html" class="project-card">
+                    <img src="Photo Projet/reporting.jpg" alt="Analyse de données sportives" class="project-image">
+                    <div class="project-info">
+                        <h3>Création d'un reporting sur Excel et VBA</h3>
+                        <p>Visualisation et modification de note afin d'avoir un résumé final sur l'année.</p>
+                    </div>
+                </a>
+
+                <!-- Projet 2 -->
+                <a href="projet2.html" class="project-card">
+                    <img src="Photo Projet/BaseDonnée.jpg" alt="Système de recommandation" class="project-image">
+                    <div class="project-info">
+                        <h3>Création d'une base de donnée en Python et EasyPhp</h3>
+                        <p>Conception d'une base de données sur mesure pour une entreprise fictive, de la modélisation à
+                            la création</p>
+                    </div>
+                </a>
+
+                <!-- Projet 3 -->
+                <a href="projet3.html" class="project-card">
+                    <img src="Photo Projet/Territoire.jpg" alt="Classification d'images" class="project-image">
+                    <div class="project-info">
+                        <h3>Présentation bilingue d'une ville olympique</h3>
+                        <p>Réalisation d'un diaporama en français et en anglais pour présenter une ville hôte des Jeux
+                            Olympiques.</p>
+                    </div>
+                </a>
+
+                <!-- Projet 4 -->
+                <a href="projet4.html" class="project-card">
+                    <img src="Photo Projet/Stat.jpg" alt="Analyse de sentiments" class="project-image">
+                    <div class="project-info">
+                        <h3>Analyse statistique sur la démographie francaise </h3>
+                        <p>Réalisation d'un rapport statistique portant sur le chômage et la CSP des francais dans un
+                            département précis.</p>
+                    </div>
+                </a>
+
+                <!-- Projet 5 -->
+                <a href="projet5.html" class="project-card">
+                    <img src="Photo Projet/Portfolio.jpg" alt="Détection de fraudes" class="project-image">
+                    <div class="project-info">
+                        <h3>Création d'un site en HTML et CSS</h3>
+                        <p>Apprentissage automatique sur transactions</p>
+                    </div>
+                </a>
+
+                <!-- Projet 6 -->
+                <a href="projet6.html" class="project-card">
+                    <img src="Photo Projet/RegLine.jpg" alt="Visualisation géospatiale" class="project-image">
+                    <div class="project-info">
+                        <h3>Modèle de régression linéaire</h3>
+                        <p>Modèle R pour prédire les prix immobiliers en Deux-Sèvres à partir de données historiques.
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Projet 7 -->
+                <a href="projet7.html" class="project-card">
+                    <img src="Photo Projet/Wait.jpg" alt="Optimisation de parcours" class="project-image">
+                    <div class="project-info">
+                        <h3>Optimisation de parcours</h3>
+                        <p>Algorithmes de graphes pour la logistique</p>
+                    </div>
+                </a>
+
+                <!-- Projet 8 -->
+                <a href="projet8.html" class="project-card">
+                    <img src="Photo Projet/Wait.jpg" alt="Prédiction de séries temporelles" class="project-image">
+                    <div class="project-info">
+                        <h3>Prédiction de séries temporelles</h3>
+                        <p>Modèles ARIMA et LSTM</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Animation du header au scroll
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Animation des cartes au chargement
+        const projectCards = document.querySelectorAll('.project-card');
+
+        projectCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // ============================================
+        // MULTI-ZONE TOPOGRAPHIC FIELD GENERATOR
+        // ============================================
+        (function () {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+
+            // CONFIGURATION
+            const CONFIG = {
+                gridSize: 18,
+                isoLevels: 8,
+                baseLineWidth: 2.5,
+                zoneCount: 5,
+                evolutionSpeed: 0.0005
+            };
+
+            // --- FAST NOISE (Permutation Table) ---
+            const PERM = new Uint8Array(512);
+            const GRAD3 = [[1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0], [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1], [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]];
+
+            for (let i = 0; i < 256; i++) PERM[i] = PERM[i + 256] = Math.floor(Math.random() * 256);
+
+            function noise3D(x, y, z) {
+                let X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+                x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+                let u = fade(x), v = fade(y), w = fade(z);
+                let A = PERM[X] + Y, AA = PERM[A] + Z, AB = PERM[A + 1] + Z, B = PERM[X + 1] + Y, BA = PERM[B] + Z, BB = PERM[B + 1] + Z;
+
+                return lerp(w, lerp(v, lerp(u, grad(PERM[AA], x, y, z), grad(PERM[BA], x - 1, y, z)),
+                    lerp(u, grad(PERM[AB], x, y - 1, z), grad(PERM[BB], x - 1, y - 1, z))),
+                    lerp(v, lerp(u, grad(PERM[AA + 1], x, y, z - 1), grad(PERM[BA + 1], x - 1, y, z - 1)),
+                        lerp(u, grad(PERM[AB + 1], x, y - 1, z - 1), grad(PERM[BB + 1], x - 1, y - 1, z - 1))));
+            }
+            function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+            function lerp(t, a, b) { return a + t * (b - a); }
+            function grad(hash, x, y, z) {
+                let h = hash & 15;
+                let u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+                return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+            }
+
+            // --- TERRAIN ZONES ---
+            class Zone {
+                constructor() {
+                    this.init();
+                }
+
+                init() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.05;
+                    this.vy = (Math.random() - 0.5) * 0.05;
+                    this.radius = Math.min(width, height) * (0.4 + Math.random() * 0.4);
+                    this.noiseOffset = Math.random() * 1000;
+                    this.noiseScale = 0.002 + Math.random() * 0.003;
+                    this.timeSpeed = CONFIG.evolutionSpeed * (0.8 + Math.random() * 0.4);
+                    this.t = 0;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.t += this.timeSpeed;
+
+                    if (this.x < -this.radius) this.vx = Math.abs(this.vx);
+                    if (this.x > width + this.radius) this.vx = -Math.abs(this.vx);
+                    if (this.y < -this.radius) this.vy = Math.abs(this.vy);
+                    if (this.y > height + this.radius) this.vy = -Math.abs(this.vy);
+                }
+
+                evaluate(px, py) {
+                    const dx = px - this.x;
+                    const dy = py - this.y;
+                    const distSq = dx * dx + dy * dy;
+                    const rSq = this.radius * this.radius;
+
+                    if (distSq > rSq) return 0;
+
+                    const falloff = Math.pow(1 - distSq / rSq, 2);
+                    const n = noise3D(px * this.noiseScale, py * this.noiseScale, this.t + this.noiseOffset);
+
+                    return (0.5 + 0.5 * n) * falloff;
+                }
+            }
+
+            // --- MARCHING SQUARES STATE ---
+            let zones = [];
+            let cols, rows;
+            let grid = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+
+                cols = Math.ceil(width / CONFIG.gridSize) + 1;
+                rows = Math.ceil(height / CONFIG.gridSize) + 1;
+                grid = new Float32Array(cols * rows);
+
+                if (zones.length === 0) {
+                    for (let i = 0; i < CONFIG.zoneCount; i++) zones.push(new Zone());
+                }
+            }
+
+            function updateGrid() {
+                zones.forEach(z => z.update());
+
+                let idx = 0;
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        const px = x * CONFIG.gridSize;
+                        const py = y * CONFIG.gridSize;
+
+                        let sum = 0;
+                        for (let z = 0; z < zones.length; z++) {
+                            sum += zones[z].evaluate(px, py);
+                        }
+
+                        grid[idx++] = sum;
+                    }
+                }
+            }
+
+            function lerpPos(val1, val2, target) {
+                return (target - val1) / (val2 - val1);
+            }
+
+            function drawContours() {
+                ctx.clearRect(0, 0, width, height);
+
+                for (let k = 1; k <= CONFIG.isoLevels; k++) {
+                    const threshold = (k / (CONFIG.isoLevels + 1)) * 1.5;
+
+                    ctx.beginPath();
+
+                    const opacity = 0.15 + (k / CONFIG.isoLevels) * 0.35;
+                    ctx.strokeStyle = `rgba(212, 165, 116, ${opacity})`;
+                    ctx.lineWidth = CONFIG.baseLineWidth;
+
+                    for (let y = 0; y < rows - 1; y++) {
+                        for (let x = 0; x < cols - 1; x++) {
+                            const iTL = y * cols + x;
+                            const iTR = iTL + 1;
+                            const iBR = iTR + cols;
+                            const iBL = iTL + cols;
+
+                            const vTL = grid[iTL];
+                            const vTR = grid[iTR];
+                            const vBR = grid[iBR];
+                            const vBL = grid[iBL];
+
+                            let state = 0;
+                            if (vTL > threshold) state |= 8;
+                            if (vTR > threshold) state |= 4;
+                            if (vBR > threshold) state |= 2;
+                            if (vBL > threshold) state |= 1;
+
+                            if (state === 0 || state === 15) continue;
+
+                            const cx = x * CONFIG.gridSize;
+                            const cy = y * CONFIG.gridSize;
+                            const gs = CONFIG.gridSize;
+
+                            const a = { x: cx + gs * lerpPos(vTL, vTR, threshold), y: cy };
+                            const b = { x: cx + gs, y: cy + gs * lerpPos(vTR, vBR, threshold) };
+                            const c = { x: cx + gs * lerpPos(vBL, vBR, threshold), y: cy + gs };
+                            const d = { x: cx, y: cy + gs * lerpPos(vTL, vBL, threshold) };
+
+                            switch (state) {
+                                case 1: drawLine(c, d); break;
+                                case 2: drawLine(b, c); break;
+                                case 3: drawLine(b, d); break;
+                                case 4: drawLine(a, b); break;
+                                case 5: drawLine(a, d); drawLine(b, c); break;
+                                case 6: drawLine(a, c); break;
+                                case 7: drawLine(a, d); break;
+                                case 8: drawLine(d, a); break;
+                                case 9: drawLine(c, a); break;
+                                case 10: drawLine(a, b); drawLine(c, d); break;
+                                case 11: drawLine(b, a); break;
+                                case 12: drawLine(d, b); break;
+                                case 13: drawLine(c, b); break;
+                                case 14: drawLine(d, c); break;
+                            }
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            function drawLine(p1, p2) {
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+            }
+
+            function animate() {
+                updateGrid();
+                drawContours();
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        })();
+    </script>
+</body>
+
+</html>

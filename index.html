@@ -1,199 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Esthor Paul | Science des Données</title>
+    <meta name="description" content="Découvrez le portfolio de Paul Esthor, étudiant en Science des Données spécialisé en analyse statistique et programmation.">
+    <meta property="og:title" content="Paul Esthor | Portfolio Science des Données">
+    <meta property="og:description" content="Découvrez le portfolio de Paul Esthor, étudiant en Science des Données spécialisé en analyse statistique et programmation.">
+    <meta property="og:type" content="website">
+    <title>Paul Esthor | Portfolio Science des Données</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        /* Mesh Background */
-        .mesh-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            z-index: -2;
-            pointer-events: none;
-            background: 
-                radial-gradient(circle at 30% 50%, var(--secondary), transparent 70%),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,50 L100,50 M50,0 L50,100" stroke="%234cc9f0" stroke-width="0.3" stroke-dasharray="2 2"/></svg>');
-        }
-        
-        @media (min-width: 1600px) {
-            .mesh-bg {
-                opacity: 0.05;
-                background-size: 50px 50px;
-            }
-        }
-        
-        /* Tech Icons */
-        .tech-icons-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .tech-icon {
-            position: absolute;
-            opacity: 0.5;
-            filter: drop-shadow(0 0 8px var(--secondary));
-            animation: float 8s ease-in-out infinite;
-            width: 40px;
-            height: 40px;
-            display: none; /* Caché par défaut */
-        }
-        
-        .tech-icon:nth-child(1),
-        .tech-icon:nth-child(2) {
-            display: block; /* Les 2 premières icônes toujours visibles */
-        }
-        
-        @media (min-width: 1600px) {
-            .tech-icon {
-                width: 50px;
-                height: 50px;
-                opacity: 0.6;
-                display: block; /* Toutes visibles sur grand écran */
-            }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        
-        /* Header */
-        header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        @media (min-width: 1600px) {
-            .container {
-                max-width: 1400px;
-            }
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
         /* Hero Section */
         .hero {
             display: flex;
             align-items: center;
             min-height: 100vh;
             padding: 100px 0 50px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
             position: relative;
         }
-        
-        @media (min-width: 1600px) {
-            .hero {
-                padding: 120px 0;
-                min-height: 90vh;
-            }
-        }
-        
+
         .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text {
             flex: 1;
-            padding-right: 40px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards 0.3s;
         }
-        
-        @media (min-width: 1600px) {
-            .hero-content {
-                padding-right: 80px;
-            }
-        }
-        
+
         .hero-image {
             flex: 1;
             text-align: center;
@@ -201,45 +41,19 @@
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards 0.6s;
         }
-        
+
         .hero-image img {
             max-width: 350px;
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             transition: all 0.5s ease;
             border: 3px solid rgba(76, 201, 240, 0.1);
         }
-        
-        @media (min-width: 1600px) {
-            .hero-image img {
-                max-width: 450px;
-            }
+
+        .hero-image img:hover {
+            transform: scale(1.05);
         }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 20px;
-            color: white;
-            line-height: 1.2;
-        }
-        
-        @media (min-width: 1600px) {
-            h1 {
-                font-size: 3.5rem;
-                margin-bottom: 30px;
-            }
-            
-            .hero-content p {
-                font-size: 1.1rem;
-                max-width: 90%;
-            }
-        }
-        
-        .highlight {
-            color: var(--secondary);
-            font-weight: 700;
-        }
-        
+
         /* Keyword Rotator */
         .keyword-rotator {
             position: relative;
@@ -248,202 +62,284 @@
             font-family: 'Courier New', monospace;
             color: var(--secondary);
         }
-        
+
         .keyword-rotator::after {
             content: '|';
             animation: blink 1s step-end infinite;
             margin-left: 2px;
         }
-        
+
         @keyframes blink {
-            from, to { opacity: 0; }
-            50% { opacity: 1; }
-        }
-        
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid var(--secondary);
-            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
-        }
-        
-        .btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(76, 201, 240, 0.4);
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: var(--secondary);
-            margin-left: 15px;
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--secondary);
-            color: var(--dark);
-        }
-        
-        /* Social Links */
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .social-links a {
-            color: var(--text);
-            font-size: 1.5rem;
-            transition: all 0.3s;
-        }
-        
-        .social-links a:hover {
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-        
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+
+            from,
             to {
+                opacity: 0;
+            }
+
+            50% {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        /* About Sections */
+        .about-section {
+            padding: 80px 0;
+            position: relative;
         }
-        
-        .pulse {
-            animation: pulse 2s infinite;
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
         }
-        
+
+        .about-section:nth-child(even) .about-content {
+            flex-direction: row-reverse;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            flex: 1;
+            max-width: 450px;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 60px;
+        }
+
         /* Responsive */
+        @media (max-width: 992px) {
+
+            .hero-content,
+            .about-content {
+                flex-direction: column !important;
+                text-align: center;
+            }
+
+            .about-section:nth-child(even) .about-content {
+                flex-direction: column !important;
+            }
+
+            .hero-image img {
+                max-width: 280px;
+                width: 100%;
+            }
+
+            .about-image {
+                max-width: 350px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .hero {
-                flex-direction: column;
-                text-align: center;
                 padding-top: 80px;
             }
-            
-            .hero-content {
-                padding-right: 0;
-                margin-bottom: 40px;
+
+            .section-title {
+                font-size: 2rem;
             }
-            
-            .nav-links {
-                gap: 15px;
+
+            .about-section {
+                padding: 60px 0;
             }
-            
-            .btn-container {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn {
-                margin: 0;
-            }
-            
-            .social-links {
-                justify-content: center;
-            }
-            
-            .tech-icon {
-                width: 30px;
-                height: 30px;
+
+            .about-content {
+                padding: 0 20px;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Background Elements -->
-    <div class="mesh-bg"></div>
-    <div class="tech-icons-container">
-        <div class="tech-icon" style="top:20%; left:5%; animation-delay:0s;">
-            <svg viewBox="0 0 24 24"><path fill="var(--secondary)" d="M11.9 1.1c-1.3.1-2.6.4-3.9.9-1.1.5-2.1 1.2-3 2-1.4 1.3-2.4 2.9-3 4.7-.6 1.9-.7 3.8-.4 5.8.3 1.8 1 3.5 2 5 1.1 1.6 2.5 2.9 4.2 3.8 1.6.9 3.4 1.4 5.2 1.5 3.7.1 7.1-1.4 9.4-4 .6-.7 1.1-1.4 1.5-2.2-2.3 1.5-5.1 1.9-7.7 1.1-2.6-.8-4.6-2.7-5.4-5.3-.4-1.2-.5-2.5-.3-3.7.2-1.3.7-2.5 1.4-3.5.8-1.1 1.9-1.9 3.1-2.4 1.3-.5 2.6-.7 4-.6h1.5c-1.1-1.1-2.4-2-3.8-2.6-1.7-.7-3.5-1-5.3-.9z"/></svg>
-        </div>
-        <div class="tech-icon" style="top:70%; left:85%; animation-delay:1.5s;">
-            <svg viewBox="0 0 24 24"><path fill="var(--secondary)" d="M4 1h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2zm8 15c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5z"/></svg>
-        </div>
-        <div class="tech-icon" style="top:40%; right:8%; animation-delay:2.5s;">
-            <svg viewBox="0 0 24 24"><path fill="var(--secondary)" d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
-        </div>
-        <div class="tech-icon" style="top:15%; right:15%; animation-delay:3s;">
-            <svg viewBox="0 0 24 24"><path fill="var(--secondary)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-        </div>
-    </div>
+    <canvas id="canvas"></canvas>
 
     <!-- Header -->
     <header id="header">
         <div class="container">
             <nav>
-                <div class="logo">Paul Esthor</div>
+                <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
-                    <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="#accueil">Accueil</a>
+                    <a href="#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-    
-    <!-- Main Content -->
+
     <main>
-        <section class="hero">
+        <!-- Hero Section -->
+        <section id="accueil" class="hero">
             <div class="container">
-                <div style="display: flex; align-items: center;">
-                    <div class="hero-content">
+                <div class="hero-content">
+                    <div class="hero-text">
                         <h1>Bonjour, je m'appelle <span class="highlight">Paul Esthor</span></h1>
                         <p>
                             Étudiant en BUT Science des Données spécialisé en <br>
-                            <span class="keyword-rotator" id="keywords">Programation</span>
+                            <span class="keyword-rotator" id="keywords">Programmation</span>
                         </p>
                         <p class="hero-description">
-                            Étudiant en Science des Données, je suis passionné par l'analyse des données et leur utilisation pour résoudre des problématiques concrètes. Mon objectif est de comprendre les enjeux d'un projet et d'utiliser les données pour en tirer des solutions adaptées.
+                            Alternant Data Manager chez Legrand et étudiant en BUT Science des Données (Parcours EMS), je suis passionné par la gestion, la gouvernance et l'analyse statistique des données. Mon objectif est de valoriser la donnée d'entreprise pour en tirer des solutions concrètes et adaptées.
                         </p>
                         <div class="btn-container">
-                            <a href="Projet.html" class="btn pulse">Voir mes projets <i class="fas fa-arrow-right"></i></a>
+                            <a href="Projet.html" class="btn pulse">Voir mes projets <i
+                                    class="fas fa-arrow-right"></i></a>
                             <a href="Contact.html" class="btn btn-outline">Me contacter</a>
                         </div>
                         <div class="social-links">
-                            <a href="https://github.com/paulesthor" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                            <a href="https://www.linkedin.com/in/paul-esthor-7b1712179" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                            <a href="CV.pdf" download title="Télécharger mon CV"><i class="fas fa-file-download"></i></a>
+                            <a href="https://github.com/paulesthor" target="_blank" title="GitHub"><i
+                                    class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/paul-esthor-7b1712179" target="_blank"
+                                title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="CV.pdf" download title="Télécharger mon CV"><i
+                                    class="fas fa-file-download"></i></a>
                         </div>
                     </div>
                     <div class="hero-image">
-                        <img src="PhotoApropos/IMG_20240830_185730_449.jpg" alt="Esthor Paul - Étudiant en Science des Données">
+                        <img src="PhotoApropos/IMG_20240830_185730_449.jpg"
+                            alt="Paul Esthor - Étudiant en Science des Données">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Qui suis-je Section -->
+        <section id="qui-suis-je" class="about-section">
+            <div class="container">
+                <h2 class="section-title">Qui suis-je ?</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Bonjour ! Je m'appelle Paul Esthor, j'ai 25 ans et je viens de Poitiers. Actuellement alternant Data Manager chez Legrand et étudiant en BUT Science des Données (Parcours EMS), je me passionne pour la gouvernance, la programmation et l'analyse statistique. Cette alternance me permet de mettre en pratique et d'enrichir quotidiennement mes compétences en gestion de bases de données, en structuration de flux d'information et en traitement statistique.</p>
+                        <p>En dehors de mes études, je suis passionné par le volley-ball, un sport que je pratique
+                            régulièrement depuis maintenant 15 ans. J'aime aussi voyager et découvrir de nouvelles
+                            cultures, ce qui enrichit mes perspectives et m'aide à rester motivé dans mes projets.</p>
+                        <p>Je suis constamment à la recherche de nouveaux défis et de projets intéressants. N'hésitez
+                            pas à explorer mon portfolio pour en savoir plus sur mes réalisations et à me contacter si
+                            vous souhaitez échanger !</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="PhotoApropos/kid2.jpg" alt="Paul Esthor jeune">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mes Passions Section -->
+        <section class="about-section">
+            <div class="container">
+                <h2 class="section-title">Mes Passions</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>En dehors de mes études, le volley-ball occupe une place très importante dans ma vie. J'ai eu
+                            la chance de suivre un sport-études au lycée, ce qui m'a permis de combiner ma passion pour
+                            le sport avec mon parcours scolaire. Cela m'a appris à être discipliné, à gérer mon temps
+                            entre les entraînements et les cours, et surtout à toujours donner le meilleur de moi-même,
+                            que ce soit sur le terrain ou en dehors.</p>
+                        <p>La musique fait également partie de mes passions, et je m'amuse à jouer du piano. Je suis
+                            encore débutant, mais j'aime prendre du temps pour jouer quelques morceaux. C'est une
+                            activité que je fais pour le plaisir, sans pression, et ça me permet de m'évader un peu
+                            après une journée bien remplie.</p>
+                        <p>Voyager, c'est vraiment quelque chose qui me passionne. J'ai eu la chance de partir en
+                            Australie pendant six mois en tant qu'Au pair, une expérience qui m'a permis de découvrir
+                            une culture totalement différente tout en vivant une aventure au bout du monde. Ce séjour
+                            m'a permis non seulement de rencontrer des gens formidables, mais aussi d'interagir avec des
+                            animaux que je n'avais jamais vus avant, comme les kangourous et les koalas.</p>
+                        <p>Après ces six mois, j'ai décidé de rester un peu plus longtemps pour explorer l'Australie par
+                            mes propres moyens, et j'ai adoré l'idée de me retrouver dans des endroits totalement
+                            différents notamment la Tasmanie beaucoup plus rurale. Ce voyage m'a permis d'apprendre
+                            beaucoup sur moi-même, de me confronter à de nouvelles situations et de m'adapter à un mode
+                            de vie tout à fait différent.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="PhotoApropos/Australie.jpg" alt="Paul en Australie">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mon Bilan Section -->
+        <section class="about-section">
+            <div class="container">
+                <h2 class="section-title">Mon Bilan en Science des Données</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Reprendre les études après avoir travaillé et validé un premier diplôme, ce n'est pas
+                            évident. Le rythme est soutenu, surtout au début, et j'ai eu du mal à retrouver une vraie
+                            routine. Entre les cours, les projets, et les devoirs, il m'a fallu du temps pour m'adapter
+                            et retrouver un équilibre.</p>
+                        <p>En revanche, j'ai vu de vrais progrès en informatique et en programmation. J'ai gagné en
+                            logique et en autonomie, et je suis plus à l'aise avec les outils qu'on utilise en data
+                            science. Python, SQL, Power BI… au début, tout cela était nouveau pour moi, mais à force de
+                            pratique, c'est devenu plus naturel.</p>
+                        <p>Un projet m'a particulièrement marqué cette année : celui sur la démographie française. On
+                            devait réaliser un rapport statistique et proposer une stratégie de campagne électorale pour
+                            le NFP. Ce projet m'a permis de croiser des données et de réfléchir à leur interprétation
+                            dans un contexte concret.</p>
+                        <p>Côté vie étudiante, j'avais quelques craintes en début d'année. J'ai 25 ans, alors que
+                            beaucoup de mes camarades sortent tout juste du lycée. J'avais peur de ne pas trouver ma
+                            place. Mais finalement, les échanges se sont faits naturellement. On a appris à travailler
+                            ensemble, à partager nos expériences et à nous entraider.</p>
+                        <p>Globalement, je suis satisfait de la formation. Le contenu est intéressant et les compétences
+                            qu'on acquiert sont concrètes et utiles. Cette première année m'a permis de poser des bases
+                            solides et de comprendre l'importance de rester curieux et rigoureux.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="PhotoApropos/ONU2.jpg" alt="Mon parcours">
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <script src="js/animation.js"></script>
     <script>
         // Rotateur de mots-clés
-        const keywords = ["Analyste ", "Statistiques", "Data Visualisation", "Données"];
+        const keywords = ["Analyste", "Statistiques", "Data Visualisation", "Données"];
         let current = 0;
         const element = document.getElementById('keywords');
-        
+
         function rotateKeywords() {
             current = (current + 1) % keywords.length;
             element.style.opacity = 0;
@@ -452,43 +348,9 @@
                 element.style.opacity = 1;
             }, 500);
         }
-        
-        setInterval(rotateKeywords, 3000);
 
-        // Animation du header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-        
-        // Animation fluide des ancres
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-        
-        // Gestion des icônes tech pour différents écrans
-        function handleTechIcons() {
-            const techIcons = document.querySelectorAll('.tech-icon');
-            const isLargeScreen = window.innerWidth >= 1600;
-            
-            techIcons.forEach((icon, index) => {
-                if (index >= 2) { // Les 2 premières toujours visibles
-                    icon.style.display = isLargeScreen ? 'block' : 'none';
-                }
-            });
-        }
-        
-        window.addEventListener('resize', handleTechIcons);
-        handleTechIcons(); // Exécuter au chargement
+        setInterval(rotateKeywords, 3000);
     </script>
 </body>
+
 </html>

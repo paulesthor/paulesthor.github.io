@@ -1,301 +1,125 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nom du Projet | Esthor Paul</title>
+    <meta name="description" content="Détails du projet 'Reporting Excel et VBA' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Reporting Excel et VBA | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Reporting Excel et VBA' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Reporting Excel et VBA | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-         /* Header */
-         header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Section Projet */
-        .project-hero {
-            padding: 100px 0 30px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
-        }
-        
-        .project-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Bandeau photo */
-        .project-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
-        
-        .project-gallery img {
-            height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(76, 201, 240, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .project-gallery img:hover {
-            transform: scale(1.03);
-        }
-        
-        /* Contenu principal */
-        .project-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-        }
-        
-        .project-details {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-        }
-        
-        .project-meta {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-            align-self: start;
-        }
-        
-        /* Téléchargements */
-        .download-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            padding-top: 30px;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-        
-        .download-btn i {
-            margin-right: 10px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .project-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .project-gallery img {
-                height: 300px;
-            }
-        }
-        .logo {
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
 </head>
+
 <body>
-    <!-- Header identique aux autres pages -->
-    <header id="header">
+    <canvas id="canvas"></canvas>
+        <header id="header">
         <div class="container">
             <nav>
-                <div class="logo">Paul Esthor</div>
+                <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-    
     <main>
-        <!-- Hero Section -->
         <section class="project-hero">
             <div class="project-container">
-                <h1>Création d'un reporting sur Excel et VBA</h1>
-                <p>Visualisation et modification de note afinn d'avoir un résumé final sur l'année.</p>
+                <span class="project-badge scolaire">Scolaire</span>
+                <h1>Reporting Excel et VBA</h1>
+                <p>Outil de gestion et visualisation de notes avec Excel et VBA</p>
             </div>
         </section>
-        <div style="height: 30px;"></div>
-        <div style="height: 30px;"></div>
-        <!-- Bandeau photos -->
         <div class="project-container">
-            
             <div class="project-content">
-                <!-- Partie texte descriptive -->
                 <div class="project-details">
                     <h2>Description du Projet</h2>
-                    <p>Dans le cadre de ce projet, j'ai développé avec un camarade un fichier Excel complet permettant de gérer et de visualiser l'ensemble de mes notes en BUT Science des Données.
-                        L'outil propose plusieurs fonctionnalités : l'ajout et la modification de notes à travers des menus déroulants intuitifs, un tableau de bord dynamique avec graphiques pour suivre l'évolution des résultats, ainsi qu'un système automatique de décision de jury pour valider le passage en deuxième année.
-                        
-                        L'application a été conçue pour être ergonomique, optimisée et simple d'utilisation, en utilisant principalement les fonctionnalités avancées d'Excel (listes, formules dynamiques, tableaux croisés) et du VBA uniquement pour automatiser certaines tâches plus complexes.
-                        Un guide d'utilisation a également été rédigé pour accompagner l'utilisateur dans la prise en main de l'outil.
-                        
-                        Ce projet m'a permis de renforcer mes compétences en bureautique avancée, en conception d'interfaces simples et en automatisation de traitements de données.</p>
-                    
+                    <p>Dans le cadre de ce projet, j'ai développé avec un camarade un fichier Excel complet permettant
+                        de gérer et de visualiser l'ensemble de mes notes en BUT Science des Données. L'outil propose
+                        plusieurs fonctionnalités : l'ajout et la modification de notes à travers des menus déroulants
+                        intuitifs, un tableau de bord dynamique avec graphiques pour suivre l'évolution des résultats,
+                        ainsi qu'un système automatique de décision de jury pour valider le passage en deuxième année.
+                    </p>
+                    <p>L'application a été conçue pour être ergonomique, optimisée et simple d'utilisation, en utilisant
+                        principalement les fonctionnalités avancées d'Excel (listes, formules dynamiques, tableaux
+                        croisés) et du VBA uniquement pour automatiser certaines tâches plus complexes. Un guide
+                        d'utilisation a également été rédigé pour accompagner l'utilisateur dans la prise en main de
+                        l'outil.</p>
+                    <p>Ce projet m'a permis de renforcer mes compétences en bureautique avancée, en conception
+                        d'interfaces simples et en automatisation de traitements de données.</p>
+
                     <h3>Technologies utilisées</h3>
                     <ul>
                         <li>Excel</li>
                         <li>VBA</li>
                     </ul>
-                    
+
                     <h3>Fonctionnalités clés</h3>
                     <p>Le système permet de :</p>
                     <ul>
-                        <li>Ajout / Modification / Suppression des notes </li>
-                        <li>Visualisation des notes en focntion du semestre et de la matière</li>
+                        <li>Ajout / Modification / Suppression des notes</li>
+                        <li>Visualisation des notes en fonction du semestre et de la matière</li>
                         <li>Rapport des notes sur l'année et validation ou non de l'année</li>
                     </ul>
-                    
-                    <!-- Section Téléchargements -->
-                    <div class="download-section">
+                </div>
+
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <p><strong>Durée :</strong> 3 Semaines</p>
+                        <p><strong>Date :</strong> Décembre 2024 - Janvier 2025</p>
+                        <p><strong>Catégorie :</strong> Data Science, Visualisation</p>
+
+                        <h3>Compétences mobilisées</h3>
+                        <ul>
+                            <li>Automatisation et programmation VBA</li>
+                            <li>Conception d'interfaces utilisateurs (UI)</li>
+                            <li>Reporting et visualisation de données</li>
+                        </ul>
+                    </div>
+
+                    <div class="project-sidebar">
                         <h3>Téléchargements</h3>
                         <a href="SAE/SujetVBA.pdf" class="download-btn" download>
-                            <i class="fas fa-file-pdf"></i> Dossier 
+                            <i class="fas fa-file-pdf"></i> Dossier
                         </a>
                         <a href="SAE/Pro Flop Loris Paul.xlsm" class="download-btn" download>
-                            <i class="fas fa-file-powerpoint"></i> Présentation / Sujet
+                            <i class="fas fa-file-excel"></i> Fichier Excel
                         </a>
                     </div>
                 </div>
-                
-                <!-- Métadonnées -->
-                <div class="project-meta">
-                    <h3>Informations</h3>
-                    <p><strong>Durée :</strong> 3 Semaine</p>
-                    <p><strong>Date :</strong> Décembre 2024 - Janvier 2025</p>
-                    <p><strong>Catégorie :</strong> Data Science, Visualisation</p>
-                    
-                    <h3>Compétences mobilisées</h3>
-                    <ul>
-                        <li>Automatisation et programmation VBA</li>
-                        <li>Conception d'interfaces utilisateurs (UI) </li>
-                        <li>Reporting et visualisation de données</li>
-                    </ul>
-                </div>
             </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
         </div>
     </main>
-
+    <script src="js/animation.js"></script>
     <script>
-        // Animation du header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
             }
         });
     </script>
 </body>
+
 </html>

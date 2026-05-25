@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="En savoir plus sur Paul Esthor, son parcours en science des données, ses passions pour le volley-ball et les voyages.">
+    <meta property="og:title" content="À propos | Paul Esthor">
+    <meta property="og:description" content="En savoir plus sur Paul Esthor, son parcours en science des données, ses passions pour le volley-ball et les voyages.">
+    <meta property="og:type" content="website">
     <title>À propos | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
             --primary: #1a1a2e;
@@ -20,84 +25,7 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
             background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-        /* Header */
-        header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
         }
         
         /* Section Hero À propos */
@@ -264,12 +192,18 @@
                 <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="Apropos.html" class="active">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
@@ -286,7 +220,7 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>Qui suis-je ?</h2>
-                    <p>Bonjour ! Je m'appelle Paul Esthor, j'ai 25 ans et je viens de Poitiers. Actuellement, je poursuis mes études en Science des Données et je m'intéresse particulièrement à la programmation et à l'analyse de données. Dans ce domaine, j'ai l'opportunité de développer des compétences essentielles, comme la gestion de bases de données, la modélisation statistique et l'utilisation d'outils de data science.</p>
+                    <p>Bonjour ! Je m'appelle Paul Esthor, j'ai 25 ans et je viens de Poitiers. Actuellement alternant Data Manager chez Legrand et étudiant en BUT Science des Données (Parcours EMS), je me passionne pour la gouvernance, la programmation et l'analyse de données. Dans ce cadre, j'ai l'opportunité d'appliquer et de consolider mes compétences en gestion de bases de données, en structuration de flux d'information et en analyse statistique.</p>
                     <p>En dehors de mes études, je suis passionné par le volley-ball, un sport que je pratique régulièrement depuis maintenant 15 ans. J'aime aussi voyager et découvrir de nouvelles cultures, ce qui enrichit mes perspectives et m'aide à rester motivé dans mes projets.</p>
                     <p>Je suis constamment à la recherche de nouveaux défis et de projets intéressants. N'hésitez pas à explorer mon portfolio pour en savoir plus sur mes réalisations et à me contacter si vous souhaitez échanger !</p>
                 </div>
@@ -314,7 +248,7 @@
         <section class="about-section">
             <div class="about-content">
                 <div class="about-text">
-                    <h2>Mon bilan sur cette première année en Science des Données</h2>
+                    <h2>Mon bilan en Science des Données & Alternance</h2>
                     <p>Reprendre les études après avoir travaillé et validé un premier diplôme, ce n'est pas évident. Le rythme est soutenu, surtout au début, et j'ai eu du mal à retrouver une vraie routine. Entre les cours, les projets, et les devoirs, il m'a fallu du temps pour m'adapter et retrouver un équilibre. Les mathématiques ont clairement été la matière la plus difficile, autant sur le fond que sur la méthode. Avant, je n'avais jamais vraiment eu à réviser : il a donc fallu apprendre à m'organiser autrement, revoir mes notes régulièrement, refaire les exercices et chercher à comprendre en profondeur.</p>
 
                     <p>En revanche, j'ai vu de vrais progrès en informatique et en programmation. J'ai gagné en logique et en autonomie, et je suis plus à l'aise avec les outils qu'on utilise en data science. Python, SQL, Power BI… au début, tout cela était nouveau pour moi, mais à force de pratique, c'est devenu plus naturel. J'ai appris à structurer mes projets, à faire attention aux détails et à garder une approche rigoureuse.</p>
@@ -323,11 +257,9 @@
 
                     <p>Côté vie étudiante, j'avais quelques craintes en début d'année. J'ai 25 ans, alors que beaucoup de mes camarades sortent tout juste du lycée. J'avais peur de ne pas trouver ma place. Mais finalement, les échanges se sont faits naturellement. On a appris à travailler ensemble, à partager nos expériences et à nous entraider. Aujourd'hui, je me sens bien intégré et à l'aise dans cette ambiance.</p>
 
-                    <p>Globalement, je suis satisfait de la formation. Le contenu est intéressant et les compétences qu'on acquiert sont concrètes et utiles. J'ai compris que le monde de la data est en constante évolution et qu'il faudra toujours continuer à apprendre. Cette première année m'a permis de poser des bases solides et de comprendre l'importance de rester curieux et rigoureux.</p>
+                    <p>L'année en cours (BUT 2) a été particulièrement enrichissante grâce à mon alternance chez Legrand en tant que Data Manager. Cette expérience m'a confronté aux exigences de la gouvernance des données, de la qualité des référentiels et du travail collaboratif en entreprise. Allier la formation théorique de l'IUT de Niort avec la réalité opérationnelle d'un grand groupe industriel m'a fait mûrir professionnellement.</p>
 
-                    <p>Mais je sais aussi que je dois encore progresser. Mon rythme de travail n'est pas suffisant, et j'ai parfois tendance à me reposer sur mes acquis. Il faut que je m'habitue à travailler régulièrement, même sans échéance proche, et que j'ose demander de l'aide quand je bloque. C'est un défi, mais je suis motivé à le relever.</p>
-
-                    <p>En prenant du recul, je me rends compte que cette année m'a permis de me redécouvrir. Elle m'a montré que je pouvais relever des défis, même quand c'était difficile. Elle m'a donné envie d'aller plus loin, de progresser, et de devenir plus confiant dans mes compétences. Cette première année n'est qu'un début, et je suis prêt à continuer sur cette voie.</p>
+                    <p>Cette alternance a confirmé mon goût pour la valorisation des données et la gestion des flux. Je mesure le chemin parcouru depuis le début de ma reconversion et la force que représente ma double compétence issue du tourisme et de la gestion de données.</p>
                 </div>
                 <div class="about-image">
                     <img src="PhotoApropos/ONU2.jpg" alt="Mon parcours">
@@ -336,6 +268,7 @@
         </section>
     </main>
 
+    <script src="js/animation.js"></script>
     <script>
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');

@@ -1,256 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nom du Projet | Esthor Paul</title>
+    <meta name="description" content="Détails du projet 'Conception d'une base de données en Python et EasyPhp' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Base de Données Python | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Conception d'une base de données en Python et EasyPhp' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Base de Données Python | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-         /* Header */
-         header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Section Projet */
-        .project-hero {
-            padding: 100px 0 30px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
-        }
-        
-        .project-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Bandeau photo */
-        .project-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
-        
-        .project-gallery img {
-            height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(76, 201, 240, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .project-gallery img:hover {
-            transform: scale(1.03);
-        }
-        
-        /* Contenu principal */
-        .project-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-        }
-        
-        .project-details {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-        }
-        
-        .project-meta {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-            align-self: start;
-        }
-        
-        /* Téléchargements */
-        .download-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            padding-top: 30px;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-        
-        .download-btn i {
-            margin-right: 10px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .project-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .project-gallery img {
-                height: 300px;
-            }
-        }
-        .logo {
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
 </head>
+
 <body>
-    <!-- Header identique aux autres pages -->
-    <header id="header">
+    <canvas id="canvas"></canvas>
+        <header id="header">
         <div class="container">
             <nav>
-                <div class="logo">Paul Esthor</div>
+                <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-    
     <main>
-        <!-- Hero Section -->
         <section class="project-hero">
             <div class="project-container">
-                <h1>Conception d’une base de données en Python et EasyPhp</h1>
-                <p>Conception d'une base de données sur mesure pour une entreprise fictive, de la modélisation à la création.</p>
+                <span class="project-badge scolaire">Scolaire</span>
+                <h1>Conception d'une base de données en Python et EasyPhp</h1>
+                <p>Conception d'une base de données sur mesure pour une entreprise fictive, de la modélisation à la
+                    création.</p>
             </div>
         </section>
-        <div style="height: 30px;"></div>
-        <div style="height: 30px;"></div>
-        <!-- Bandeau photos -->
         <div class="project-container">
-            
             <div class="project-content">
-                <!-- Partie texte descriptive -->
                 <div class="project-details">
                     <h2>Description du Projet</h2>
-                    <p>Dans le cadre de ce, nous avons conçu et développé une base de données complète pour informatiser la gestion des approvisionnements et des ventes de sel de la coopérative de l’île de Ré. L’objectif était de structurer les données issues des récoltes des sauniers, du traitement des produits (gros sel et fleur de sel), ainsi que de leur distribution vers les clients professionnels (centrales d’achat).
+                    <p>Dans le cadre de ce projet, nous avons conçu et développé une base de données complète pour
+                        informatiser la gestion des approvisionnements et des ventes de sel de la coopérative de l'île
+                        de Ré. L'objectif était de structurer les données issues des récoltes des sauniers, du
+                        traitement des produits (gros sel et fleur de sel), ainsi que de leur distribution vers les
+                        clients professionnels (centrales d'achat).</p>
+                    <p>Le projet a été réalisé en plusieurs étapes :</p>
+                    <ul>
+                        <li>Conception du modèle conceptuel de données (MCD) avec Looping MCD à partir de données brutes
+                            et de contraintes métier.</li>
+                        <li>Génération du schéma relationnel (MLD), puis création automatisée des tables MySQL via
+                            script SQL.</li>
+                        <li>Insertion manuelle et automatisée (avec Python) de données issues de fichiers CSV et Excel.
+                        </li>
+                        <li>Rédaction de requêtes SQL complexes pour extraire des indicateurs utiles (ventes par
+                            produit, moyenne par client, etc.), incluant des opérations comme GROUP BY, HAVING, vues, et
+                            des mises à jour/différences algébriques.</li>
+                        <li>Développement d'une interface graphique en Python avec Tkinter</li>
+                    </ul>
+                    <p>Ce projet m'a permis de consolider mes compétences en modélisation de base de données, en
+                        requêtage SQL, en automatisation de traitements avec Python, et en création d'interfaces
+                        utilisateurs ergonomiques.</p>
 
-                        Le projet a été réalisé en plusieurs étapes :
-                        
-                        <li>Conception du modèle conceptuel de données (MCD) avec Looping MCD à partir de données brutes et de contraintes métier. </li>
-                        
-                        <li>Génération du schéma relationnel (MLD), puis création automatisée des tables MySQL via script SQL.</li>
-                        
-                        <li>Insertion manuelle et automatisée (avec Python) de données issues de fichiers CSV et Excel.</li>
-                        
-                        <li>Rédaction de requêtes SQL complexes pour extraire des indicateurs utiles (ventes par produit, moyenne par client, etc.), incluant des opérations comme GROUP BY, HAVING, vues, et des mises à jour/différences algébriques.</li>
-                        
-                        <li>Développement d’une interface graphique en Python avec Tkinter</li>
-                        <br>    
-                        Ce projet m’a permis de consolider mes compétences en modélisation de base de données, en requêtage SQL, en automatisation de traitements avec Python, et en création d’interfaces utilisateurs ergonomiques.
-                        </p>
-                
                     <h3>Technologies utilisées</h3>
                     <ul>
                         <li>MySQL</li>
@@ -259,64 +81,64 @@
                         <li>Looping</li>
                         <li>Excel</li>
                     </ul>
-                    
+
                     <h3>Fonctionnalités clés</h3>
                     <p>Le système permet de :</p>
-                    <ul style="margin-left: 20px;">
+                    <ul>
                         <li>Création complète de la base de données relationnelle (MCD, MLD, script SQL)</li>
                         <li>Insertion automatique des données à partir de fichiers externes (CSV/Excel)</li>
-                        <li>Interface graphique intuitive pour :
-                          <ul>
-                            <li>Visualiser les données</li>
-                            <li>Lancer des requêtes prédéfinies</li>
-                            <li>Ajouter de nouvelles données</li>
-                          </ul>
-                        </li>
+                        <li>Interface graphique intuitive pour visualiser les données, lancer des requêtes prédéfinies,
+                            et ajouter de nouvelles données</li>
                         <li>Génération de rapports personnalisés pour la coopérative (ventes, stocks, clients)</li>
-                        <li>Intégration d’un système de gestion des prix par année et par produit</li>
-                      </ul
-                    <!-- Section Téléchargements -->
-                    <div class="download-section">
+                        <li>Intégration d'un système de gestion des prix par année et par produit</li>
+                    </ul>
+                </div>
+
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <p><strong>Durée :</strong> 4 Semaines</p>
+                        <p><strong>Date :</strong> Mars - Avril 2025</p>
+                        <p><strong>Catégorie :</strong> Base de données</p>
+
+                        <h3>Compétences mobilisées</h3>
+                        <ul>
+                            <li>Modélisation de base de données (MCD / MLD)</li>
+                            <li>SQL</li>
+                            <li>Conception d'interface utilisateur</li>
+                            <li>Travail en binôme et gestion de projet</li>
+                        </ul>
+                    </div>
+
+                    <div class="project-sidebar">
                         <h3>Téléchargements</h3>
-                        <p>Vous ne pourrez pas voir l'ensemble des fonctionnalitées car vous ne serez pas connecter à la base. </p>
+                        <p>Vous ne pourrez pas voir l'ensemble des fonctionnalités car vous ne serez pas connecté à la
+                            base.</p>
                         <a href="SAE/SAE Armand Paul.zip" class="download-btn" download>
-                            <i class="fas fa-code"></i> Télécharger le fichier Python
+                            <i class="fas fa-code"></i> Fichier Python
                         </a>
                         <a href="SAE/BaseDonnée.pdf" class="download-btn" download>
                             <i class="fas fa-file-pdf"></i> Présentation / Sujet
                         </a>
                     </div>
                 </div>
-                
-                <!-- Métadonnées -->
-                <div class="project-meta">
-                    <h3>Informations</h3>
-                    <p><strong>Durée :</strong> 4 Semaine</p>
-                    <p><strong>Date :</strong> Mars - Avril 2025 </p>
-                    <p><strong>Catégorie :</strong> Base de donnée</p>
-                    
-                    <h3>Compétences mobilisées</h3>
-                    <ul>
-                        <li>Modélisation de base de donnée (MCD / MLD) </li>
-                        <li>SQL</li>
-                        <li>Conception d'interface utilisateur</li>
-                        <li>Travail en binôme et gestion de projet</li>
-                    </ul>
-                </div>
             </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
         </div>
     </main>
-
+    <script src="js/animation.js"></script>
     <script>
-        // Animation du header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
             }
         });
     </script>
 </body>
+
 </html>

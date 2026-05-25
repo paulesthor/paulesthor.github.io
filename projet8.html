@@ -1,308 +1,123 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projets à Venir | Esthor Paul</title>
+    <meta name="description" content="Détails du projet 'Dashboard Power BI' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Dashboard Power BI | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Dashboard Power BI' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Dashboard Power BI | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-         /* Header */
-         header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Section Projet */
-        .project-hero {
-            padding: 100px 0 30px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
-        }
-        
-        .project-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Bandeau photo */
-        .project-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
-        
-        .project-gallery img {
-            height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(76, 201, 240, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .project-gallery img:hover {
-            transform: scale(1.03);
-        }
-        
-        /* Contenu principal */
-        .project-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-        }
-        
-        .project-details {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-        }
-        
-        .project-meta {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-            align-self: start;
-        }
-        
-        /* Téléchargements */
-        .download-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            padding-top: 30px;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-        
-        .download-btn i {
-            margin-right: 10px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .project-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .project-gallery img {
-                height: 300px;
-            }
-        }
-        .logo {
-            text-decoration: none;
-        }
-
-        .coming-soon {
-            text-align: center;
-            padding: 50px 0;
-            font-size: 1.2rem;
-        }
-
-        .coming-soon-icon {
-            font-size: 3rem;
-            color: var(--secondary);
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
 </head>
+
 <body>
-    <!-- Header identique aux autres pages -->
-    <header id="header">
+    <canvas id="canvas"></canvas>
+        <header id="header">
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-    
-        <main>
-            <!-- Hero Section -->
-            <section class="project-hero">
-                <div class="project-container">
-                    <h1>Projet Fleury Michon : Analyse des ventes et visualisation</h1>
-                    <p>Exploration et visualisation de données réelles fournies par l'entreprise Fleury Michon dans le cadre d'une étude commerciale.</p>
-                </div>
-            </section>
-            <div style="height: 30px;"></div>
-            <div style="height: 30px;"></div>
-
-            <!-- Bandeau photos -->
+    <main>
+        <section class="project-hero">
             <div class="project-container">
-                <div class="project-content">
-                    <!-- Partie texte descriptive -->
-                    <div class="project-details">
-                        <h2>Description du Projet</h2>
-                        <p>Ce projet, réalisé en groupe, visait à analyser un jeu de données fourni par Fleury Michon sur ses ventes de produits alimentaires. L’objectif était de repérer des tendances, de créer des visualisations pertinentes et de formuler des recommandations commerciales.</p>
-                        <p>Nous avons identifié les produits les plus rentables, comprendre les pics de ventes et proposer des axes d’amélioration. Le projet s’est terminé par un raport écrit et un visuel.</p>
+                <span class="project-badge scolaire">Scolaire</span>
+                <h1>Dashboard Power BI</h1>
+                <p>Création d'un tableau de bord interactif pour visualiser des KPIs d'entreprise.</p>
+            </div>
+        </section>
+        <div class="project-container">
+            <div class="project-content">
+                <div class="project-details">
+                    <h2>Description du Projet</h2>
+                    <p>Ce projet consistait à concevoir et développer un tableau de bord Power BI complet pour suivre
+                        les indicateurs clés de performance (KPIs) d'une entreprise. Le dashboard permet une
+                        visualisation claire et interactive des données métier.</p>
+                    <p>Le projet inclut la connexion aux sources de données, la modélisation des données, la création de
+                        mesures DAX personnalisées et le design d'une interface utilisateur intuitive.</p>
 
-                        <h3>Technologies utilisées</h3>
-                        <ul> 
-                            <li>Excel</li>
-                            <li>Analyse exploratoire de données</li> 
-                        </ul>
+                    <h3>Technologies utilisées</h3>
+                    <ul>
+                        <li>Power BI Desktop</li>
+                        <li>DAX</li>
+                        <li>Power Query</li>
+                        <li>Excel</li>
+                    </ul>
 
-                        <h3>Fonctionnalités clés</h3>
-                        <p>Le projet inclut :</p>
-                        <ul>
-                            <li>Création de tableaux de bord </li>
-                            <li>Analyse des ventes par produit, mois et région</li>
-                            <li>Présentation écrite avec synthèse visuelle</li>
-                        </ul>
+                    <h3>Fonctionnalités du dashboard</h3>
+                    <ul>
+                        <li>Vue d'ensemble des KPIs principaux</li>
+                        <li>Analyse des ventes par période et par région</li>
+                        <li>Suivi de la performance des produits</li>
+                        <li>Filtres interactifs et slicers</li>
+                        <li>Graphiques dynamiques (barres, lignes, camemberts)</li>
+                        <li>Indicateurs de tendance et d'évolution</li>
+                        <li>Export de rapports personnalisés</li>
+                    </ul>
+                </div>
 
-                        <!-- Section Téléchargements -->
-                        <div class="download-section">
-                            <h3>Téléchargements</h3>
-                            <p>Téléchargez le support de présentation au format PDF :</p>
-                            <a href="SAE/Rapport Fleury-Michon.pdf" class="download-btn" download>
-                                <i class="fas fa-file-pdf"></i> Rapport PDF
-                           
-                            <a href="SAE/dashboard.png" class="download-btn" download>
-                                <i class="fas fa-file-pdf"></i> Infographie PDF
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Métadonnées -->
+                <div class="project-sidebar-container">
                     <div class="project-meta">
                         <h3>Informations</h3>
-                        <p><strong>Durée :</strong> 1 journée</p>
-                        <p><strong>Date :</strong> Mai 2025</p>
-                        <p><strong>Catégorie :</strong> Data visualisation</p>
+                        <p><strong>Durée :</strong> 3 Semaines</p>
+                        <p><strong>Date :</strong> Janvier 2025</p>
+                        <p><strong>Catégorie :</strong> Business Intelligence, Visualisation</p>
 
                         <h3>Compétences mobilisées</h3>
-                        <ul> 
-                            <li>Visualisation de données</li>
-                            <li>Analyse commerciale</li>
-                            <li>Travail en équipe et communication</li> 
+                        <ul>
+                            <li>Power BI</li>
+                            <li>Langage DAX</li>
+                            <li>Modélisation de données</li>
+                            <li>Data Visualization</li>
                         </ul>
+                    </div>
+
+                    <div class="project-sidebar">
+                        <h3>Téléchargements</h3>
+                        <a href="#" class="download-btn">
+                            <i class="fas fa-file"></i> Fichier Power BI
+                        </a>
+                        <a href="#" class="download-btn">
+                            <i class="fas fa-file-pdf"></i> Documentation
+                        </a>
                     </div>
                 </div>
             </div>
-        </main>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
+        </div>
+    </main>
+    <script src="js/animation.js"></script>
     <script>
-        // Animation du header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
             }
         });
     </script>
 </body>
+
 </html>

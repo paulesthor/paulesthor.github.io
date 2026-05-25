@@ -1,305 +1,117 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nom du Projet | Esthor Paul</title>
+    <meta name="description" content="Détails du projet 'Présentation bilingue d'une ville olympique' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Ville Olympique | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Présentation bilingue d'une ville olympique' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Ville Olympique | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-        
-         /* Header */
-         header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Section Projet */
-        .project-hero {
-            padding: 100px 0 30px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
-        }
-        
-        .project-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Bandeau photo */
-        .project-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
-        
-        .project-gallery img {
-            height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(76, 201, 240, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .project-gallery img:hover {
-            transform: scale(1.03);
-        }
-        
-        /* Contenu principal */
-        .project-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-        }
-        
-        .project-details {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-        }
-        
-        .project-meta {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-            align-self: start;
-        }
-        
-        /* Téléchargements */
-        .download-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            padding-top: 30px;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .download-btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-        
-        .download-btn i {
-            margin-right: 10px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .project-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .project-gallery img {
-                height: 300px;
-            }
-        }
-        .logo {
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
 </head>
+
 <body>
-    <!-- Header identique aux autres pages -->
-    <header id="header">
+    <canvas id="canvas"></canvas>
+        <header id="header">
         <div class="container">
             <nav>
-                <div class="logo">Paul Esthor</div>
+                <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-    
     <main>
-        <!-- Hero Section -->
         <section class="project-hero">
             <div class="project-container">
+                <span class="project-badge scolaire">Scolaire</span>
                 <h1>Présentation bilingue d'une ville olympique</h1>
-                <p>Réalisation d'un diaporama en français et en anglais pour présenter une ville hôte des Jeux Olympiques.</p>
+                <p>Réalisation d'un diaporama en français et en anglais pour présenter une ville hôte des Jeux
+                    Olympiques.</p>
             </div>
         </section>
-        <div style="height: 30px;"></div>
-        <div style="height: 30px;"></div>
-        <!-- Bandeau photos -->
         <div class="project-container">
-            
             <div class="project-content">
-                <!-- Partie texte descriptive -->
                 <div class="project-details">
                     <h2>Description du Projet</h2>
-                    <p>Dans le cadre d’un projet pluridisciplinaire, j’ai participé à une analyse complète autour d’un pays organisateur des Jeux Olympiques. L’objectif était de croiser des données économiques, culturelles et géographiques afin de présenter un panorama global des impacts des JO, à travers deux volets : un travail en anglais et un autre en français.</p>
-                    
-                    <p>Ce projet a été l’occasion de développer des compétences en recherche, synthèse, communication orale et travail collaboratif. Il a aussi mis l’accent sur l’utilisation de l’anglais dans un contexte académique et professionnel.</p>
-                    
-                    <h3>Volet en anglais</h3>
+                    <p>Ce projet consistait à créer une présentation bilingue complète sur une ville olympique. J'ai
+                        choisi de présenter Paris et son rôle en tant que ville hôte des Jeux Olympiques 2024.</p>
+                    <p>La présentation devait être réalisée en français et en anglais, avec des informations détaillées
+                        sur l'histoire de la ville, ses infrastructures olympiques, et l'impact des Jeux sur le
+                        territoire.</p>
+
+                    <h3>Technologies utilisées</h3>
                     <ul>
-                        <li>Présentation des données géographiques et climatiques</li>
-                        <li>Analyse démographique et économique du pays hôte</li>
-                        <li>Étude de l’impact des JO sur le PIB/PNB</li>
-                        <li>Évaluation du coût du voyage depuis Niort</li>
+                        <li>PowerPoint</li>
+                        <li>Recherche documentaire</li>
+                        <li>Traduction FR/EN</li>
                     </ul>
-                    
-                    <h3>Volet en français</h3>
+
+                    <h3>Contenu de la présentation</h3>
                     <ul>
-                        <li>Étude historique et architecturale</li>
-                        <li>Analyse de l’impact des JO sur l’urbanisme et les transports</li>
+                        <li>Histoire olympique de la ville</li>
+                        <li>Infrastructures et sites olympiques</li>
+                        <li>Impact économique et social</li>
+                        <li>Héritage des Jeux Olympiques</li>
                     </ul>
-                    
-                    <h3>Livrables réalisés</h3>
-                    <ul>
-                        <li>Présentation orale en anglais</li>
-                        <li>Présentation orale en français</li>
-                        <li>Diaporama PowerPoint bilingue</li>
-                        <li>Document écrit en anglais</li>
-                    </ul>                    
-                    <!-- Section Téléchargements -->
-                    <div class="download-section">
+                </div>
+
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <p><strong>Durée :</strong> 2 Semaines</p>
+                        <p><strong>Date :</strong> Octobre 2024</p>
+                        <p><strong>Catégorie :</strong> Communication, Anglais</p>
+
+                        <h3>Compétences mobilisées</h3>
+                        <ul>
+                            <li>Recherche et synthèse d'information</li>
+                            <li>Communication bilingue</li>
+                            <li>Présentation orale</li>
+                            <li>Design de diaporama</li>
+                        </ul>
+                    </div>
+
+                    <div class="project-sidebar">
                         <h3>Téléchargements</h3>
-                        <a href="SAE/Les-Jeux-olympiques-de-Sydney-2000-11.odp" class="download-btn" download>
-                            <i class="fas fa-file-powerpoint"></i> Dossier 
-                        </a>
-                        <a href="SAE/SAé 2024 - présentation (1).pptx" class="download-btn" download>
-                            <i class="fas fa-file-powerpoint"></i> Présentation / Sujet
+                        <a href="#" class="download-btn">
+                            <i class="fas fa-file-powerpoint"></i> Présentation
                         </a>
                     </div>
                 </div>
-                
-                <!-- Métadonnées -->
-                <div class="project-meta">
-                    <h3>Informations</h3>
-                    <p><strong>Durée :</strong> 3 séances de 2 heures</p>
-                    <p><strong>Date :</strong> Octobre 2024</p>
-                    <p><strong>Catégorie :</strong> Création de suport, Présentation orale</p>
-                    
-                    <h3>Compétences mobilisées</h3>
-                    <ul>
-                        <li>Recherche et structuration d’informations</li>
-                        <li>Communication orale et écrite bilingue</li>
-                        <li>Travail en équipe</li>
-                        <li>Utilisation d’outils bureautiques pour la mise en forme (PowerPoint, Word)</li>
-                    </ul>
-                </div>
             </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
         </div>
     </main>
-
+    <script src="js/animation.js"></script>
     <script>
-        // Animation du header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
             }
         });
     </script>
 </body>
+
 </html>

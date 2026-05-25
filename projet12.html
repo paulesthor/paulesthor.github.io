@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Détails du projet 'Spoti-Lolo' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Spoti-Lolo | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Spoti-Lolo' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Spoti-Lolo | Paul Esthor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+        <header id="header">
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Paul Esthor</a>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
+                    <a href="parcours.html">Mon Parcours</a>
+                    <a href="Projet.html">Projets</a>
+                    <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
+                    <a href="Contact.html">Contact</a>
+                </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="project-hero">
+            <div class="project-container">
+                <span class="project-badge personnel">Personnel</span>
+                <h1>Spoti-Lolo</h1>
+                <p>Plateforme de streaming de partitions PDF avec Backend Supabase</p>
+            </div>
+        </section>
+        <div class="project-container">
+            <div class="project-content">
+                <div class="project-details">
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-bullseye"></i> Contexte & Problématique</h2>
+                        <p><strong>Spoti-Lolo</strong> est né d'un besoin très concret pour mon père ("Lolo"), un passionné qui joue de la musique de temps en temps mais qui accumulait des centaines de partitions papier volantes ou rangées dans des classeurs lourds et peu pratiques. Trouver rapidement un morceau précis ou organiser son répertoire devenait complexe au fil du temps.</p>
+                        <p>L'objectif était de lui concevoir une plateforme web sur-mesure pour centraliser toutes ses partitions numériques en un seul endroit et simplifier sa pratique musicale au quotidien.</p>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-music"></i> Fonctionnalités sur-mesure</h2>
+                        <p>L'application regroupe des outils adaptés à sa pratique instrumentale :</p>
+                        <ul class="features-list">
+                            <li><strong>Recherche instantanée :</strong> Un système pour trouver et filtrer une musique très facilement par titre ou artiste.</li>
+                            <li><strong>Gestion de Playlists :</strong> Un système intuitif pour créer et organiser des listes de lecture thématiques selon les sessions.</li>
+                            <li><strong>Badges de Maîtrise :</strong> Des indicateurs visuels clairs (badges) signalant si une musique est maîtrisée ou s'il faut encore la travailler.</li>
+                            <li><strong>Défilement Automatique Réglable :</strong> Un système de défilement de la partition dont la vitesse est entièrement réglable, permettant de jouer sans avoir à libérer ses mains pour tourner la page.</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-database"></i> Architecture & Stockage</h2>
+                        <p>Afin de gérer ces centaines de partitions de manière efficace, l'application s'appuie sur une structure moderne :</p>
+                        <ul class="features-list">
+                            <li><strong>Supabase Database :</strong> PostgreSQL pour le stockage structuré des musiques, des playlists et de l'état de maîtrise des morceaux.</li>
+                            <li><strong>Supabase Storage :</strong> Stockage sécurisé des fichiers PDF des partitions avec chargement fluide à la demande.</li>
+                            <li><strong>Visionneuse Intégrée :</strong> Intégration de PDF.js pour un rendu net des partitions directement dans le navigateur, sans téléchargement préalable.</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <ul class="meta-list">
+                            <li><span>Destinataire</span> <span>Mon Père ("Lolo")</span></li>
+                            <li><span>Type</span> <span>Application Web</span></li>
+                            <li><span>Date</span> <span>2024</span></li>
+                            <li><span>Base de données</span> <span>Supabase (PostgreSQL)</span></li>
+                        </ul>
+
+                        <h3>Stack Technique</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Frontend JS (SPA)</span>
+                            <span class="tech-tag">Supabase Storage</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">PDF.js</span>
+                        </div>
+                    </div>
+
+                    <div class="project-actions">
+                        <h3>Accéder à l'app</h3>
+                        <a href="https://paulesthor.github.io/Spoty-lolo/" target="_blank" class="btn-action primary">
+                            <i class="fas fa-play-circle"></i> Demo Live
+                        </a>
+                        <a href="https://github.com/paulesthor/Spoty-lolo" target="_blank" class="btn-action secondary">
+                            <i class="fab fa-github"></i> Code Source
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
+        </div>
+    </main>
+    <script src="js/animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

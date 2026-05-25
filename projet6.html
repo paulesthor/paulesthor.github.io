@@ -1,269 +1,123 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nom du Projet | Esthor Paul</title>
+    <meta name="description" content="Détails du projet 'Modèle de régression linéaire' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:title" content="Régression Linéaire | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Modèle de régression linéaire' réalisé par Paul Esthor en Science des Données.">
+    <meta property="og:type" content="website">
+    <title>Régression Linéaire | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #1a1a2e;
-            --secondary: #4cc9f0;
-            --light: #16213e;
-            --dark: #0f0f1b;
-            --accent: #f72585;
-            --text: #e2e2e2;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        header {
-            background-color: rgba(26, 26, 46, 0.9);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .project-hero {
-            padding: 100px 0 30px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--light) 100%);
-        }
-
-        .project-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .project-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 40px;
-        }
-
-        .project-gallery img {
-            height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 2px solid rgba(76, 201, 240, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .project-gallery img:hover {
-            transform: scale(1.03);
-        }
-
-        .project-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 40px;
-            align-items: start; /* <-- Ajouté ici */
-        }
-
-        .project-details,
-        .project-meta {
-            background-color: rgba(26, 26, 46, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(76, 201, 240, 0.1);
-        }
-
-        .download-section {
-            margin-top: 40px;
-            border-top: 1px solid rgba(76, 201, 240, 0.2);
-            padding-top: 30px;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .download-btn:hover {
-            background-color: transparent;
-            color: var(--secondary);
-            transform: translateY(-3px);
-        }
-
-        .download-btn i {
-            margin-right: 10px;
-        }
-
-        @media (max-width: 1024px) {
-            .project-content {
-                grid-template-columns: 1fr;
-            }
-
-            .project-gallery img {
-                height: 300px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
 </head>
+
 <body>
-    <header id="header">
+    <canvas id="canvas"></canvas>
+        <header id="header">
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
                     <a href="Contact.html">Contact</a>
                 </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
             </nav>
         </div>
     </header>
-
     <main>
         <section class="project-hero">
             <div class="project-container">
+                <span class="project-badge scolaire">Scolaire</span>
                 <h1>Modèle de régression linéaire</h1>
-                <p>Réalisation d'une régression linéaire afin de prédire les prix de l'immobilier dans les Deux-Sèvres</p>
+                <p>Modèle R pour prédire les prix immobiliers en Deux-Sèvres à partir de données historiques.</p>
             </div>
         </section>
-
-        <div style="height: 30px;"></div>
         <div class="project-container">
             <div class="project-content">
                 <div class="project-details">
                     <h2>Description du Projet</h2>
-                    <p>Dans le cadre de cette SAÉ, j’ai travaillé en binôme sur un projet de régression portant sur les ventes immobilières réalisées dans le département des Deux-Sèvres en 2023 et au premier semestre 2024. L’objectif était de prédire le prix de vente de logements à partir d’un jeu d’entraînement et de générer des prédictions pour un second jeu de données.</p>
-                    <p>L’originalité du projet résidait dans les contraintes imposées : l’interdiction d’utiliser des fonctions de régression classiques telles que <code>lm()</code> ou <code>predict()</code>, ainsi que toute librairie externe. Nous avons donc construit nous-mêmes un modèle de régression linéaire à partir de zéro, en calculant manuellement les coefficients par la méthode des moindres carrés.</p>
-                    <p>Nous avons commencé par une phase d’analyse exploratoire pour étudier la distribution de la variable cible (valeur foncière) et identifier les variables explicatives les plus pertinentes. Cette démarche a été guidée par des visualisations statistiques croisées avec les variables qualitatives (type de bien, localisation) et quantitatives (surface, nombre de pièces).</p>
-                    <p>Le modèle a ensuite été appliqué au jeu de test pour produire un fichier de prédiction au format CSV, utilisable pour comparer notre performance selon la somme des carrés des résidus. Ce projet nous a permis d’approfondir notre compréhension des modèles statistiques et de renforcer nos compétences en programmation R, notamment en modélisation, traitement de données et rigueur algorithmique.</p>
+                    <p>Ce projet de machine learning avait pour objectif de développer un modèle de régression linéaire
+                        capable de prédire les prix de l'immobilier dans le département des Deux-Sèvres. Le modèle
+                        utilise des données historiques de ventes immobilières pour identifier les facteurs influençant
+                        les prix.</p>
+                    <p>L'analyse inclut l'exploration des données, la sélection des variables pertinentes, la
+                        construction du modèle et son évaluation avec différentes métriques de performance.</p>
 
                     <h3>Technologies utilisées</h3>
                     <ul>
-                        <li>R (sans librairie externe)</li>
-                        <li>Traitement de fichiers CSV</li>
-                        <li>Régression linéaire manuelle</li>
+                        <li>R</li>
+                        <li>ggplot2</li>
+                        <li>dplyr</li>
+                        <li>caret</li>
                     </ul>
 
-                    <h3>Fonctionnalités clés</h3>
+                    <h3>Étapes du projet</h3>
                     <ul>
-                        <li>Importer et analyser un jeu de données immobilier réel</li>
-                        <li>Construire un modèle de régression sans fonctions automatisées</li>
-                        <li>Générer des prédictions de prix pour des logements inconnus</li>
-                        <li>Produire un fichier de sortie utilisable pour la notation</li>
+                        <li>Collecte et nettoyage des données immobilières</li>
+                        <li>Analyse exploratoire des données (EDA)</li>
+                        <li>Feature engineering et sélection de variables</li>
+                        <li>Construction du modèle de régression linéaire</li>
+                        <li>Validation et évaluation (R², RMSE, MAE)</li>
+                        <li>Visualisation des résultats et des prédictions</li>
                     </ul>
+                </div>
 
-                    <div class="download-section">
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <p><strong>Durée :</strong> 3 Semaines</p>
+                        <p><strong>Date :</strong> Décembre 2024</p>
+                        <p><strong>Catégorie :</strong> Machine Learning, Statistiques</p>
+
+                        <h3>Compétences mobilisées</h3>
+                        <ul>
+                            <li>Régression linéaire</li>
+                            <li>Programmation R</li>
+                            <li>Analyse de données</li>
+                            <li>Validation de modèles</li>
+                        </ul>
+                    </div>
+
+                    <div class="project-sidebar">
                         <h3>Téléchargements</h3>
-                        <a href="SAE/sae.r" class="download-btn" download>
-                            <i class="fas fa-file-code"></i> Code R
+                        <a href="#" class="download-btn">
+                            <i class="fas fa-file-code"></i> Script R
                         </a>
-                        <a href="SAE/Rapport SAE régréssion Nolan-Paul.docx" class="download-btn" download>
-                            <i class="fas fa-file-word"></i> Rapport de Régression
-                        </a>
-                        <a href="SAE/prediction.csv" class="download-btn" download>
-                            <i class="fas fa-file-csv"></i> Fichier de Prédiction
+                        <a href="#" class="download-btn">
+                            <i class="fas fa-file-pdf"></i> Rapport d'analyse
                         </a>
                     </div>
                 </div>
-
-                <div class="project-meta">
-                    <h3>Informations</h3>
-                    <p><strong>Durée :</strong> 1 semaine</p>
-                    <p><strong>Date :</strong> Avril 2025</p>
-                    <p><strong>Catégorie :</strong> Modélisation, Analyse de données, R</p>
-
-                    <h3>Compétences mobilisées</h3>
-                    <ul>
-                        <li>Analyse exploratoire de données</li>
-                        <li>Calcul des moindres carrés</li>
-                        <li>Préparation de fichiers de prédiction</li>
-                        <li>Travail collaboratif en binôme</li>
-                        <li>Programmation R sans librairies externes</li>
-                    </ul>
-                </div>
             </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
         </div>
     </main>
+    <script src="js/animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
+            }
+        });
+    </script>
 </body>
+
 </html>
