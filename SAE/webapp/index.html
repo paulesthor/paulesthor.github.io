@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Application web standalone d'inférence locale ONNX pour prédire automatiquement la classification douanière de produits industriels Legrand.">
+  <meta property="og:title" content="Legrand — Prédicteur de Codes Douanes (Standalone)">
+  <meta property="og:description" content="Application web standalone d'inférence locale ONNX pour prédire automatiquement la classification douanière de produits industriels Legrand.">
+  <meta property="og:type" content="website">
+  <title>Legrand — Prédicteur de Codes Douanes (Standalone)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS Inclus pour un fichier simple */
+    :root {
+      --clr-bg: #0f1115;
+      --clr-surface: #1e2128;
+      --clr-surface-hov: #252830;
+      --clr-border: #2A2D36;
+      --clr-primary: #E55B13;
+      --clr-primary-hov: #F26722;
+      --clr-text: #FAFAFA;
+      --clr-text-dim: #9FA1A6;
+      --clr-danger: #ef4444;
+      --clr-success: #10b981;
+      --clr-warning: #f59e0b;
+      --font-ui: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 12px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-ui);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header {
+      border-bottom: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-badge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--clr-primary);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    
+    .logo-badge svg { stroke: white; width: 20px; height: 20px; }
+    
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-brand { font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
+    .logo-sub { font-size: 0.75rem; color: var(--clr-text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--clr-border);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--clr-text-dim);
+    }
+    
+    .stat-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+    .stat-dot.ready { background: var(--clr-success); box-shadow: 0 0 8px rgba(16,185,129,0.4); }
+    .stat-dot.error { background: var(--clr-danger); }
+    
+    .main-content {
+      flex: 1;
+      padding: 40px 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 32px;
+    }
+    
+    .card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    h2 { font-size: 1.2rem; font-weight: 600; }
+    
+    .field-group { margin-bottom: 20px; }
+    .field-label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
+    .field-label .required { color: var(--clr-primary); }
+    .field-hint { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--clr-text-dim); }
+    
+    .field-input {
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--clr-border);
+      color: var(--clr-text);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    
+    .field-input:focus { outline: none; border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(229, 91, 19, 0.15); }
+    textarea.field-input { resize: vertical; min-height: 100px; }
+    
+    .three-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    
+    .tech-feature-row { display: grid; grid-template-columns: 1fr 1fr 40px; gap: 12px; margin-bottom: 12px; }
+    .btn-remove-feature {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--clr-danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-remove-feature:hover { background: var(--clr-danger); color: white; }
+    
+    .btn-add-feature {
+      background: none;
+      border: 1px dashed var(--clr-border);
+      color: var(--clr-text-dim);
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-add-feature:hover { color: var(--clr-text); border-color: var(--clr-text-dim); }
+    
+    .section-divider {
+      margin: 24px 0;
+      text-align: center;
+      position: relative;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: var(--clr-border);
+      z-index: 1;
+    }
+    .section-divider span {
+      background: var(--clr-surface);
+      padding: 0 12px;
+      position: relative;
+      z-index: 2;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--clr-text-dim);
+      font-weight: 600;
+    }
+    
+    .btn-predict {
+      background: var(--clr-primary);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-predict:hover:not(:disabled) { background: var(--clr-primary-hov); transform: translateY(-1px); }
+    .btn-predict:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    .results-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      color: var(--clr-text-dim);
+    }
+    .placeholder-icon { margin-bottom: 20px; opacity: 0.5; }
+    .results-placeholder h3 { margin-bottom: 12px; color: var(--clr-text); }
+    
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .results-title { font-size: 1.5rem; }
+    .results-query { color: var(--clr-text-dim); font-size: 0.95rem; margin-top: 4px; font-style: italic; }
+    
+    .pred-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      transition: transform 0.2s;
+    }
+    .pred-card:hover { transform: translateX(4px); border-color: rgba(255,255,255,0.1); }
+    
+    .pred-card.rank-1 {
+      border: 1px solid rgba(229, 91, 19, 0.4);
+      background: linear-gradient(90deg, rgba(229,91,19,0.05) 0%, rgba(229,91,19,0) 100%);
+    }
+    
+    .pred-rank {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      color: var(--clr-text-dim);
+    }
+    .rank-1 .pred-rank { background: var(--clr-primary); color: white; border-color: var(--clr-primary); }
+    
+    .pred-body { flex: 1; }
+    .pred-code { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--clr-text); letter-spacing: 0.1em; display:flex; align-items:center; gap: 12px; }
+    .copy-btn { background: none; border:none; color: var(--clr-text-dim); cursor: pointer; transition: 0.2s;}
+    .copy-btn:hover { color: var(--clr-text); }
+        
+    .pred-description { font-size: 0.95rem; color: var(--clr-text-dim); margin-top: 8px; }
+    
+    .pred-confidence { width: 140px; text-align: right; }
+    .confidence-value { font-weight: 700; font-size: 1.2rem; margin-bottom: 6px; }
+    .confidence-value.high { color: var(--clr-success); }
+    .confidence-value.medium { color: var(--clr-warning); }
+    .confidence-value.low { color: var(--clr-danger); }
+    
+    .confidence-bar-track { height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; overflow: hidden; }
+    .confidence-bar-fill { height: 100%; transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); border-radius: 3px; }
+    .fill-high { background: var(--clr-success); }
+    .fill-medium { background: var(--clr-warning); }
+    .fill-low { background: var(--clr-danger); }
+    
+    @media (max-width: 900px) {
+      .main-content { grid-template-columns: 1fr; }
+    }
+  </style>
+  
+  <!-- Includes for ONNX Runtime Web -->
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo-group">
+      <div class="logo-badge">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="6" fill="#E55B13"/>
+          <path d="M6 8h16M6 14h10M6 20h13" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-brand">Legrand</span>
+        <span class="logo-sub">Code Douane · IA</span>
+      </div>
+    </div>
+    <div class="stat-pill" id="statModel">
+      <span class="stat-dot error"></span>
+      <span>Veuillez sélectionner le modèle (.zip)</span>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <aside class="input-panel card">
+      <div class="panel-header">
+        <h2>Chargement du Modèle</h2>
+      </div>
+      <p style="font-size:0.85rem; color: var(--clr-text-dim); margin-bottom: 12px;">Sélectionnez le fichier <code>Cerveau_IA_Legrand_FINAL.zip</code> ou chargez <code>.onnx</code> et <code>.json</code>.</p>
+      
+      <div class="field-group">
+        <label class="field-label">Fichier ONNX</label>
+        <input type="file" id="fileOnnx" accept=".onnx" class="field-input" style="padding: 6px;">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Fichier Config (JSON)</label>
+        <input type="file" id="fileJson" accept=".json" class="field-input" style="padding: 6px;">
+      </div>
+      <button id="loadModelBtn" type="button" class="btn-predict" style="background:#2A2D36;">Charger le modèle dans le navigateur</button>
+      
+      <hr style="border:0; border-top: 1px solid var(--clr-border); margin: 32px 0;">
+      
+      <div class="panel-header">
+        <h2>Données produit</h2>
+      </div>
+      <form id="predictForm">
+        <div class="field-group">
+          <label class="field-label">Libellé produit <span class="required">*</span></label>
+          <textarea id="libelle" class="field-input" required placeholder="Ex: R.C.D. BIP 40A 30MA TYPE HPI"></textarea>
+        </div>
+        
+        <div class="three-cols">
+          <div class="field-group">
+            <label class="field-label">Chapitre</label>
+            <input type="text" id="chapitre" class="field-input" placeholder="Ex: 85 (optionnel)">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Classe Legrand</label>
+            <input type="text" id="classeLeg" class="field-input" placeholder="(optionnel)">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Marge Family</label>
+            <input type="text" id="famille" class="field-input" placeholder="(optionnel)">
+          </div>
+        </div>
+
+        <div class="section-divider"><span>Données techniques (optionnelles)</span></div>
+        <div id="techFeaturesList"></div>
+        <button type="button" id="addFeatureBtn" class="btn-add-feature">+ Ajouter une caractéristique</button>
+        
+        <div style="margin-top: 24px;">
+          <button type="submit" id="submitBtn" class="btn-predict" disabled>Prédire le code douane</button>
+        </div>
+      </form>
+    </aside>
+    
+    <section class="results-panel">
+      <div class="results-placeholder" id="resultsPlaceholder">
+        <div class="placeholder-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v3l2 2" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <h3>Prêt à prédire</h3>
+        <p>Chargez le modèle puis renseignez les informations du produit.</p>
+      </div>
+      
+      <div id="resultsContent" hidden>
+        <div class="results-header">
+          <div>
+            <h3 class="results-title">Résultats de prédiction</h3>
+            <p class="results-query" id="resultsQuery"></p>
+          </div>
+        </div>
+        <div id="predictionCards"></div>
+      </div>
+    </section>
+    
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

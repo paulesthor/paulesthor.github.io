@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Détails du projet 'Présentation bilingue d'une ville olympique' réalisé par Paul Esthor en Science des Données.">
-    <meta property="og:title" content="Ville Olympique | Paul Esthor">
-    <meta property="og:description" content="Détails du projet 'Présentation bilingue d'une ville olympique' réalisé par Paul Esthor en Science des Données.">
+    <meta name="description" content="Détails du projet 'Classification Douanière & IA' développé par Paul Esthor en alternance chez Legrand.">
+    <meta property="og:title" content="Classification Douanière & IA | Paul Esthor">
+    <meta property="og:description" content="Détails du projet 'Classification Douanière & IA' développé par Paul Esthor en alternance chez Legrand.">
     <meta property="og:type" content="website">
-    <title>Ville Olympique | Paul Esthor</title>
+    <title>Classification Douanière & IA | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/project-template.css">
@@ -16,7 +16,7 @@
 
 <body>
     <canvas id="canvas"></canvas>
-        <header id="header">
+    <header id="header">
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">Paul Esthor</a>
@@ -40,64 +40,66 @@
     <main>
         <section class="project-hero">
             <div class="project-container">
-                <span class="project-badge scolaire">Scolaire</span>
-                <h1>Présentation bilingue d'une ville olympique</h1>
-                <p>Réalisation d'un diaporama en français et en anglais pour présenter une ville hôte des Jeux
-                    Olympiques.</p>
+                <span class="project-badge professionnel">Professionnel</span>
+                <h1>Classification Douanière & IA</h1>
+                <p>Modèle de Machine Learning XGBoost / TF-IDF et application web ONNX pour prédire automatiquement la classification douanière de produits industriels.</p>
             </div>
         </section>
         <div class="project-container">
             <div class="project-content">
                 <div class="project-details">
                     <div class="detail-block">
-                        <h2><i class="fas fa-file-alt"></i> Description du Projet</h2>
-                        <p>Ce projet consistait à créer une présentation bilingue complète sur une ville olympique. J'ai
-                        choisi de présenter Paris et son rôle en tant que ville hôte des Jeux Olympiques 2024.</p>
-                    <p>La présentation devait être réalisée en français et en anglais, avec des informations détaillées
-                        sur l'histoire de la ville, ses infrastructures olympiques, et l'impact des Jeux sur le
-                        territoire.</p>
+                        <h2><i class="fas fa-bullseye"></i> Contexte & Problématique</h2>
+                        <p>Dans le cadre de mon alternance chez <strong>Legrand</strong> (Département R&D / Data), j'ai été confronté aux limites des bases de données traditionnelles et à la complexité des classifications douanières. Chaque nouveau produit industriel doit se voir attribuer un code douanier précis (HS Code à 10 chiffres) pour transiter aux frontières. Cette tâche, historiquement manuelle, fastidieuse et sujette aux erreurs, ralentissait le processus de commercialisation.</p>
+                        <p>Pour y remédier, j'ai développé de manière autonome un modèle d'intelligence artificielle capable de prédire automatiquement le code douane d'un produit à partir de sa description textuelle (PIM) et de ses caractéristiques techniques complexes (norme ETIM). Ce projet m'a permis d'agir en interface directe avec les directions métiers et R&D.</p>
                     </div>
 
                     <div class="detail-block">
-                        <h2><i class="fas fa-laptop-code"></i> Technologies utilisées</h2>
+                        <h2><i class="fas fa-laptop-code"></i> Stack & Approche Technique</h2>
+                        <p>Le pipeline de données a été codé entièrement en Python avec les librairies phares de la Data Science :</p>
                         <ul>
-                        <li>PowerPoint</li>
-                        <li>Recherche documentaire</li>
-                        <li>Traduction FR/EN</li>
-                    </ul>
+                            <li><strong>XGBoost Classifier :</strong> Modèle de gradient boosting d'arbres de décision configuré avec arrêt précoce (early stopping) et gestion des classes déséquilibrées.</li>
+                            <li><strong>Scikit-learn :</strong> Utilisation de <code>TfidfVectorizer</code> pour transformer le texte brut en matrice sparse (réduisant la consommation de RAM par 3) et enrichissement du vocabulaire (25 000 n-grams).</li>
+                            <li><strong>Passeport Technique Boosté :</strong> Feature engineering combinant les libellés multilingues (FR/EN) et les données techniques structurées (norme ETIM) avec pondération dynamique (coefficients x3 sur les specs critiques comme l'ampérage, la tension ou le nombre de pôles).</li>
+                            <li><strong>ONNX Runtime Web :</strong> Exportation du modèle au format ONNX pour permettre son exécution directe dans le navigateur, éliminant le besoin de serveurs d'API complexes.</li>
+                        </ul>
                     </div>
 
                     <div class="detail-block">
-                        <h2><i class="fas fa-file-powerpoint"></i> Contenu de la présentation</h2>
+                        <h2><i class="fas fa-chart-line"></i> Résultats & Impact</h2>
+                        <p>Grâce à des choix méthodologiques forts (comme le passage d'un <code>INNER JOIN</code> strict à un <code>LEFT JOIN</code> enrichi sur les données ETIM, augmentant le volume d'entraînement de 71 %, et le filtrage rigoureux des codes fictifs), le modèle a atteint des métriques de haute performance :</p>
                         <ul>
-                        <li>Histoire olympique de la ville</li>
-                        <li>Infrastructures et sites olympiques</li>
-                        <li>Impact économique et social</li>
-                        <li>Héritage des Jeux Olympiques</li>
-                    </ul>
+                            <li><strong>Top-1 Accuracy (précision exacte) :</strong> Prédiction du code exact à hauteur de <strong>82.4%</strong> sur le jeu de test.</li>
+                            <li><strong>Top-3 Accuracy (dans les 3 premiers) :</strong> Présence du vrai code dans les 3 premiers choix suggérés à <strong>91.2%</strong>.</li>
+                            <li><strong>Top-5 Accuracy (dans les 5 premiers) :</strong> Présence dans les 5 choix à <strong>94.7%</strong>.</li>
+                            <li><strong>Inférence Client (In-Browser) :</strong> Intégration de l'inférence ONNX directement dans le navigateur en JavaScript, permettant d'exécuter l'IA hors-ligne sans serveur.</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="project-sidebar-container">
                     <div class="project-meta">
                         <h3>Informations</h3>
-                        <p><strong>Durée :</strong> 2 Semaines</p>
-                        <p><strong>Date :</strong> Octobre 2024</p>
-                        <p><strong>Catégorie :</strong> Communication, Anglais</p>
+                        <p><strong>Durée :</strong> 2 Mois</p>
+                        <p><strong>Date :</strong> Septembre 2025 - Présent</p>
+                        <p><strong>Catégorie :</strong> Machine Learning, NLP, Data Engineering</p>
 
                         <h3>Compétences mobilisées</h3>
                         <ul>
-                            <li>Recherche et synthèse d'information</li>
-                            <li>Communication bilingue</li>
-                            <li>Présentation orale</li>
-                            <li>Design de diaporama</li>
+                            <li>Modélisation prédictive (XGBoost)</li>
+                            <li>NLP (TF-IDF Vectorization)</li>
+                            <li>Optimisation de pipelines de données</li>
+                            <li>Exportation de modèles (ONNX)</li>
                         </ul>
                     </div>
 
                     <div class="project-sidebar">
-                        <h3>Téléchargements</h3>
-                        <a href="#" class="download-btn">
-                            <i class="fas fa-file-powerpoint"></i> Présentation
+                        <h3>Fichiers & Applications</h3>
+                        <a href="SAE/pipeline_ameliore.py" class="download-btn" download>
+                            <i class="fas fa-file-code"></i> Script Python Pipeline
+                        </a>
+                        <a href="SAE/webapp/index.html" target="_blank" class="download-btn">
+                            <i class="fas fa-desktop"></i> Interface Web (ONNX)
                         </a>
                     </div>
                 </div>
@@ -113,7 +115,7 @@
             const backButton = document.querySelector('.btn[href="Projet.html"]');
             const badge = document.querySelector('.project-badge');
             if (backButton && badge) {
-                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                let category = badge.classList.contains('scolaire') || badge.classList.contains('professionnel') ? 'scolaire' : 'perso';
                 backButton.href = `Projet.html?filter=${category}`;
             }
         });
