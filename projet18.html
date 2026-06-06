@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Détails du projet 'Moment d'Évasion' réalisé par Paul Esthor pour une praticienne bien-être.">
+    <meta property="og:title" content="Moment d'Évasion | Paul Esthor">
+    <meta property="og:description" content="Site vitrine et plateforme de réservation en ligne pour un centre de bien-être et massages à Montamisé.">
+    <meta property="og:type" content="website">
+    <title>Moment d'Évasion | Paul Esthor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project-template.css">
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Paul Esthor</a>
+                <div class="nav-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
+                    <a href="parcours.html">Mon Parcours</a>
+                    <a href="Projet.html">Projets</a>
+                    <a href="Competences.html">Compétences</a>
+                    <a href="bilan.html">Bilan</a>
+                    <a href="Contact.html">Contact</a>
+                </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="project-hero">
+            <div class="project-container">
+                <span class="project-badge personnel">Personnel</span>
+                <h1>Moment d'Évasion</h1>
+                <p>Site vitrine et plateforme de réservation en ligne pour un centre de bien-être et massages à Montamisé.</p>
+            </div>
+        </section>
+        <div class="project-container">
+            <div class="project-content">
+                <div class="project-details">
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-bullseye"></i> Contexte & Problématique</h2>
+                        <p>Michèle, praticienne bien-être établie depuis 2016 à Montamisé (près de Poitiers), proposait massages ayurvédiques, soins prénataux, Amma assis, magnétisme et Reiki. Elle n'avait aucune présence en ligne et gérait ses rendez-vous uniquement par téléphone, sans moyen pour ses clients de la contacter facilement ni de réserver en dehors des heures d'appel.</p>
+                        <p>L'objectif était de lui créer un site professionnel complet : une vitrine haut de gamme à son image pour attirer de nouveaux clients, couplée à une plateforme fonctionnelle permettant aux clients de réserver, d'échanger des messages et à Michèle de gérer son activité depuis un tableau de bord dédié.</p>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-spa"></i> Site Vitrine</h2>
+                        <p>Le site public présente l'activité de Michèle sous un angle éditorial et luxueux :</p>
+                        <ul class="features-list">
+                            <li><strong>Pages de services détaillées :</strong> Massage ayurvédique (€80), massage prénatal (€60), Amma assis, magnétisme & Reiki — chaque soin décrit avec ses bienfaits, déroulement et tarifs.</li>
+                            <li><strong>Page témoignages :</strong> Plus de 20 avis cinq étoiles de clients, renforçant la crédibilité de la praticienne.</li>
+                            <li><strong>Design botanique & luxe :</strong> Typographies Cormorant Garamond et Montserrat, palette de verts forestiers et crèmes dorés, animations de révélation au scroll.</li>
+                            <li><strong>Responsive mobile-first :</strong> Breakpoints 1100px / 768px / 430px, grilles CSS fluides avec <code>clamp()</code> et <code>minmax()</code>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-user-circle"></i> Espace Client</h2>
+                        <p>Les clients disposent d'un espace personnel sécurisé après inscription :</p>
+                        <ul class="features-list">
+                            <li><strong>Authentification double :</strong> Email / mot de passe ou connexion Google OAuth (un clic).</li>
+                            <li><strong>Réservation en ligne :</strong> Sélection de date via calendrier avec vérification en temps réel des disponibilités.</li>
+                            <li><strong>Messagerie instantanée :</strong> Canal de communication direct avec Michèle, avec notifications de messages non lus en temps réel (Supabase Realtime).</li>
+                            <li><strong>Historique des rendez-vous :</strong> Suivi des statuts (en attente, confirmé, refusé) et historique des séances passées.</li>
+                            <li><strong>Conformité RGPD :</strong> Suppression de compte et des données personnelles sur demande (Article 17).</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-tools"></i> Tableau de Bord Admin</h2>
+                        <p>Michèle dispose d'une interface d'administration complète pour piloter son activité :</p>
+                        <ul class="features-list">
+                            <li><strong>Gestion des rendez-vous :</strong> Vue calendrier mensuelle, confirmation ou refus des demandes, blocage des indisponibilités (congés, formations).</li>
+                            <li><strong>Messagerie clients :</strong> Historique de toutes les conversations, recherche par client, réponses en temps réel.</li>
+                            <li><strong>Génération de documents :</strong> Création de factures personnalisées et bons cadeaux avec montant et message, téléchargeables en PDF.</li>
+                            <li><strong>Édition de contenu en ligne :</strong> Modification des textes du site directement depuis l'interface admin (attributs <code>data-content-key</code>), sans toucher au code.</li>
+                            <li><strong>Gestion des images :</strong> Upload, remplacement et compression automatique en WebP via Supabase Storage.</li>
+                            <li><strong>Synchronisation Google Agenda :</strong> Connexion optionnelle pour synchroniser les rendez-vous confirmés avec l'agenda personnel de Michèle.</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="project-sidebar-container">
+                    <div class="project-meta">
+                        <h3>Informations</h3>
+                        <ul class="meta-list">
+                            <li><span>Cliente</span> <span>Michèle — Moment d'Évasion</span></li>
+                            <li><span>Type</span> <span>Site vitrine + Application web</span></li>
+                            <li><span>Date</span> <span>2025 — En cours</span></li>
+                            <li><span>Localisation</span> <span>Montamisé (86), France</span></li>
+                        </ul>
+
+                        <h3>Stack Technique</h3>
+                        <div class="tech-stack">
+                            <span class="tech-tag">HTML / CSS / JS</span>
+                            <span class="tech-tag">Supabase (PostgreSQL)</span>
+                            <span class="tech-tag">Supabase Auth</span>
+                            <span class="tech-tag">Supabase Realtime</span>
+                            <span class="tech-tag">Supabase Storage</span>
+                            <span class="tech-tag">Google OAuth</span>
+                            <span class="tech-tag">Google Calendar API</span>
+                        </div>
+                    </div>
+
+                    <div class="project-actions">
+                        <h3>Accéder au projet</h3>
+                        <a href="https://github.com/paulesthor/moment" target="_blank" class="btn-action secondary">
+                            <i class="fab fa-github"></i> Code Source
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="Projet.html" class="btn">
+                <i class="fas fa-arrow-left"></i> Retour aux projets
+            </a>
+        </div>
+    </main>
+    <script src="js/animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const backButton = document.querySelector('.btn[href="Projet.html"]');
+            const badge = document.querySelector('.project-badge');
+            if (backButton && badge) {
+                let category = badge.classList.contains('scolaire') ? 'scolaire' : 'perso';
+                backButton.href = `Projet.html?filter=${category}`;
+            }
+        });
+    </script>
+</body>
+
+</html>
