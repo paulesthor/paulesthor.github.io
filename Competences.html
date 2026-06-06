@@ -217,7 +217,7 @@
         <a href="index.html" class="logo">Paul Esthor</a>
         <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html" class="active">Compétences</a>
@@ -323,7 +323,7 @@
           <div class="skill-card">
             <h3><i class="fas fa-code"></i> Programmation & BDD</h3>
             
-            <div class="skill-item" data-year="both">
+            <div class="skill-item" data-year="1">
               <div class="skill-header">
                 <span class="skill-name">Python</span>
                 <div class="skill-badges">
@@ -332,8 +332,8 @@
               </div>
               <span class="skill-desc">Scripts d'analyse de données avec Pandas, calcul matriciel avec NumPy et visualisations (Matplotlib, Seaborn).</span>
             </div>
-
-            <div class="skill-item" data-year="both">
+            
+            <div class="skill-item" data-year="1">
               <div class="skill-header">
                 <span class="skill-name">Bases de données relationnelles & SQL</span>
                 <div class="skill-badges">
@@ -342,8 +342,8 @@
               </div>
               <span class="skill-desc">Conception de schémas (MCD/MLD), requêtes SQL complexes et gestion de bases relationnelles (MySQL, PostgreSQL, Oracle).</span>
             </div>
-
-            <div class="skill-item" data-year="both">
+            
+            <div class="skill-item" data-year="1">
               <div class="skill-header">
                 <span class="skill-name">R & SAS (Programmation statistique)</span>
                 <div class="skill-badges">
@@ -368,7 +368,7 @@
           <div class="skill-card">
             <h3><i class="fas fa-tools"></i> Outils & Environnement</h3>
             
-            <div class="skill-item" data-year="both">
+            <div class="skill-item" data-year="1">
               <div class="skill-header">
                 <span class="skill-name">Dashboarding (Power BI & Tableau)</span>
                 <div class="skill-badges">
@@ -479,13 +479,13 @@
             if (filterValue === 'all') {
               item.classList.remove('hidden');
             } else if (filterValue === '1') {
-              if (itemYear === '1' || itemYear === 'both' || itemYear === 'recurrent') {
+              if (itemYear === '1' || itemYear === 'recurrent') {
                 item.classList.remove('hidden');
               } else {
                 item.classList.add('hidden');
               }
             } else if (filterValue === '2') {
-              if (itemYear === '2' || itemYear === 'both' || itemYear === 'recurrent') {
+              if (itemYear === '2' || itemYear === 'recurrent') {
                 item.classList.remove('hidden');
               } else {
                 item.classList.add('hidden');

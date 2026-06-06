@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Découvrez le site vitrine et le CMS d'édition en ligne pour la tapissière décoratrice Mathilde Gest, développé par Paul Esthor.">
+    <meta name="description" content="Découvrez le site e-commerce et le CMS d'édition en ligne pour la tapissière décoratrice Mathilde Gest, développé par Paul Esthor.">
     <meta property="og:title" content="Mathilde Gest - Tapissier Décorateur | Paul Esthor">
-    <meta property="og:description" content="Découvrez le site vitrine et le CMS d'édition en ligne pour la tapissière décoratrice Mathilde Gest, développé par Paul Esthor.">
+    <meta property="og:description" content="Site e-commerce avec paiement Stripe, gestion de stock, CMS inline et tableau de bord admin pour une tapissière décoratrice.">
     <meta property="og:type" content="website">
     <title>Mathilde Gest - Tapissier Décorateur | Paul Esthor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -16,14 +16,14 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    
+
     <header id="header">
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">Paul Esthor</a>
                 <div class="nav-links">
                     <a href="index.html">Accueil</a>
-                    <a href="Apropos.html">À propos</a>
+                    <a href="index.html#qui-suis-je">À propos</a>
                     <a href="parcours.html">Mon Parcours</a>
                     <a href="Projet.html">Projets</a>
                     <a href="Competences.html">Compétences</a>
@@ -44,7 +44,7 @@
             <div class="project-container">
                 <span class="project-badge personnel">Personnel</span>
                 <h1>Mathilde Gest - Tapissier Décorateur</h1>
-                <p>Site vitrine d'artisanat d'art et système de gestion de contenu (CMS) d'édition en ligne intégré</p>
+                <p>Site e-commerce et CMS inline pour une artisane d'art : paiement Stripe, gestion de stock, tableau de bord admin et édition de contenu en direct.</p>
             </div>
         </section>
 
@@ -54,29 +54,52 @@
 
                     <div class="detail-block">
                         <h2><i class="fas fa-bullseye"></i> Contexte & Problématique</h2>
-                        <p><strong>Mathilde Gest</strong> est une créatrice et artisane d'art qui lance son activité de tapisserie décorative (restauration de fauteuils, chaises, canapés et créations sur-mesure). Pour développer son activité, elle avait besoin d'un site vitrine haut de gamme et d'une présence en ligne professionnelle.</p>
-                        <p>Le problème majeur avec les solutions traditionnelles du marché (type Wix, Squarespace) réside dans les coûts récurrents élevés, s'élevant souvent à plus de 60 € par mois pour avoir un site personnalisé et administrable. Pour une jeune artisane en plein lancement, ce budget fixe mensuel est un frein important.</p>
-                        <p>Mathilde avait besoin de pouvoir modifier ses contenus en toute autonomie (textes explicatifs, tarifs, catalogue de réalisations et photos) sans souscrire à ces abonnements onéreux.</p>
+                        <p><strong>Mathilde Gest</strong> est une artisane d'art spécialisée dans la restauration de sièges (fauteuils, chaises, canapés) et la création de pièces textiles uniques. Pour développer son activité, elle avait besoin d'un site professionnel capable de présenter son travail, vendre ses créations en ligne et lui permettre de gérer son catalogue en totale autonomie.</p>
+                        <p>Les solutions du marché (Wix, Squarespace) représentaient un coût récurrent de plus de 60 €/mois pour un résultat insuffisamment personnalisé. Le projet a donc évolué vers une plateforme complète : site vitrine éditorial, e-commerce intégré avec Stripe, gestion de stock en temps réel et tableau de bord d'administration complet — le tout sans abonnement mensuel.</p>
                     </div>
 
                     <div class="detail-block">
-                        <h2><i class="fas fa-lightbulb"></i> La Solution : Performance & Zéro Abonnement</h2>
-                        <p>J'ai développé un site épuré au design éditorial couplé à un <strong>CMS "Inline" sur-mesure</strong> directement connecté à <strong>Supabase</strong>. L'ensemble a été conçu de manière extrêmement optimisée pour s'inscrire durablement dans l'offre gratuite (Free Tier) de Supabase :</p>
+                        <h2><i class="fas fa-shopping-cart"></i> E-Commerce & Paiement Stripe</h2>
+                        <p>Le cœur de la v2 est un système de vente en ligne intégré autour de l'API Stripe :</p>
                         <ul class="features-list">
-                            <li><strong>Optimisation des Coûts :</strong> Grâce à une base de données structurée pour ne jamais saturer, Mathilde n'a aucun abonnement mensuel à payer. Seul le nom de domaine reste payant à un coût annuel minime (quelques euros).</li>
-                            <li><strong>Inline Editing (CMS) :</strong> Après authentification, Mathilde peut modifier en direct n'importe quel texte du site en double-cliquant dessus, avec sauvegarde instantanée en base de données.</li>
-                            <li><strong>Gestion de Catalogue :</strong> Ajout et suppression rapides de produits et réalisations en ligne par l'artisane, sans aucune compétence technique requise.</li>
-                            <li><strong>Téléversement Drag-and-Drop :</strong> Remplacement ou ajout instantané d'images par simple glisser-déposer de fichiers.</li>
+                            <li><strong>Génération de liens de paiement :</strong> Une Supabase Edge Function crée dynamiquement un produit Stripe et son lien de paiement à la volée, avec collecte de l'adresse de livraison (10 pays : FR, BE, CH, LU, DE, IT, ES, NL, IE, GB) et du numéro de téléphone.</li>
+                            <li><strong>Webhook Stripe :</strong> À chaque achat confirmé, un webhook décrémente automatiquement le stock du produit en base de données via une fonction PostgreSQL atomique. Quand le stock atteint zéro, le statut passe automatiquement à "vendu".</li>
+                            <li><strong>Enregistrement des commandes :</strong> Chaque transaction crée un enregistrement complet (nom, email, téléphone, adresse de livraison, montant, ID Stripe) dans la table <code>orders</code>.</li>
+                            <li><strong>Tarification EUR :</strong> Plage de prix de 1 € à 50 000 €, affichage formaté dans les cartes produits et les modales.</li>
                         </ul>
                     </div>
 
                     <div class="detail-block">
-                        <h2><i class="fas fa-cogs"></i> Défis Techniques</h2>
-                        <h3>A. Édition en direct & BDD Supabase</h3>
-                        <p>Le défi était de rendre l'édition dynamique et transparente pour l'utilisateur en JavaScript natif. J'ai utilisé l'API `contenteditable` couplée à des événements de perte de focus (`blur`) pour déclencher des requêtes d'écriture (`upsert`) sécurisées vers la base de données PostgreSQL de Supabase.</p>
-                        
-                        <h3>B. Drag-and-Drop & Compression des Images</h3>
-                        <p>Pour s'assurer que le stockage gratuit de Supabase ne soit jamais saturé par des photos brutes d'appareil photo de plusieurs mégaoctets, j'ai développé un module de compression d'images côté client (Canvas API). Les images sont redimensionnées et optimisées avant d'être envoyées sur le bucket Supabase Storage, garantissant à la fois un chargement ultra-rapide du site et le respect du plan gratuit.</p>
+                        <h2><i class="fas fa-boxes"></i> Gestion de Stock & Catalogue</h2>
+                        <p>Les créations disponibles à la vente sont gérées en temps réel depuis l'admin :</p>
+                        <ul class="features-list">
+                            <li><strong>Page Disponibilités (/dispo) :</strong> Galerie publique des pièces disponibles avec prix, quantité et bouton d'achat Stripe intégré.</li>
+                            <li><strong>Statuts produits :</strong> Chaque produit passe automatiquement de "disponible" à "vendu" lorsque le stock atteint zéro après un achat.</li>
+                            <li><strong>Archivage :</strong> Les produits peuvent être archivés et restaurés sans suppression, pour conserver l'historique.</li>
+                            <li><strong>Upload d'images optimisé :</strong> Compression côté client (Canvas API, max 1600×1600 px, qualité 75 % JPEG) avant envoi sur Supabase Storage — le stockage gratuit ne sature jamais.</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-tachometer-alt"></i> Tableau de Bord Admin</h2>
+                        <p>Mathilde dispose d'une interface d'administration React protégée par authentification Supabase :</p>
+                        <ul class="features-list">
+                            <li><strong>Gestion des produits (/admin/products) :</strong> CRUD complet — titre, prix, quantité, description, image, statut. Liaison avec l'ID et le lien de paiement Stripe.</li>
+                            <li><strong>Suivi des commandes (/admin/orders) :</strong> Historique complet des ventes avec nom, email, téléphone, adresse de livraison, montant et statut (payé / en cours / expédié).</li>
+                            <li><strong>Modération des avis (/admin/reviews) :</strong> Flux de validation des avis clients (en attente → approuvé / refusé), filtrage par statut, création manuelle d'avis.</li>
+                            <li><strong>CMS Inline :</strong> Double-clic sur n'importe quel texte du site pour l'éditer directement, avec sauvegarde instantanée en base (<code>upsert</code> Supabase).</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-block">
+                        <h2><i class="fas fa-palette"></i> Site Vitrine & Contenu</h2>
+                        <ul class="features-list">
+                            <li><strong>Portfolio Réalisations :</strong> Galerie des restaurations passées avec layout éditorial en grille décalée, effet noir et blanc au survol et modale de détail.</li>
+                            <li><strong>Galerie Créations :</strong> Pièces uniques avec spécifications techniques et modale de détail.</li>
+                            <li><strong>Page Prestations :</strong> 3 services (restauration, confection rideaux, créations sur-mesure) avec UI interactive à hover et listes de détails dépliables.</li>
+                            <li><strong>Avis clients :</strong> Affichage des avis approuvés avec notation étoiles, formulaire de dépôt public avec anti-spam (délai de 30 secondes).</li>
+                            <li><strong>Design éditorial luxe :</strong> Typographies Cormorant Garamond + Montserrat, palette épurée, animations de révélation au scroll, responsive mobile-first.</li>
+                        </ul>
                     </div>
 
                 </div>
@@ -85,29 +108,32 @@
                     <div class="project-meta">
                         <h3>Informations</h3>
                         <ul class="meta-list">
-                            <li><span>Client</span> <span>Mathilde Gest</span></li>
-                            <li><span>Type</span> <span>Site Vitrine & CMS</span></li>
-                            <li><span>Date</span> <span>En cours (2026)</span></li>
+                            <li><span>Cliente</span> <span>Mathilde Gest</span></li>
+                            <li><span>Type</span> <span>E-commerce & CMS</span></li>
+                            <li><span>Date</span> <span>2025 — En cours</span></li>
                             <li><span>Statut</span> <span>En développement</span></li>
                         </ul>
 
                         <h3>Stack Technique</h3>
                         <div class="tech-stack">
-                            <span class="tech-tag">HTML5 / CSS3</span>
-                            <span class="tech-tag">JavaScript (ES6)</span>
-                            <span class="tech-tag">Supabase (Database)</span>
+                            <span class="tech-tag">React 19 + Vite</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                            <span class="tech-tag">Supabase (PostgreSQL)</span>
                             <span class="tech-tag">Supabase Storage</span>
+                            <span class="tech-tag">Supabase Auth</span>
+                            <span class="tech-tag">Supabase Edge Functions</span>
+                            <span class="tech-tag">Stripe API</span>
                         </div>
                     </div>
 
                     <div class="project-actions">
-                        <h3>Compétences mobilisées</h3>
-                        <ul class="features-list" style="padding-left: 0; list-style: none;">
-                            <li><i class="fas fa-database" style="color: var(--secondary); margin-right: 8px; width: 16px;"></i> Modélisation BDD (PostgreSQL)</li>
-                            <li><i class="fas fa-cloud-upload-alt" style="color: var(--secondary); margin-right: 8px; width: 16px;"></i> Stockage cloud & Médias</li>
-                            <li><i class="fas fa-magic" style="color: var(--secondary); margin-right: 8px; width: 16px;"></i> DOM API & Drag-and-Drop</li>
-                            <li><i class="fas fa-palette" style="color: var(--secondary); margin-right: 8px; width: 16px;"></i> Design UI/UX et responsive</li>
-                        </ul>
+                        <h3>Accéder au projet</h3>
+                        <a href="https://paulesthor.github.io/mathilde-v2/" target="_blank" class="btn-action primary">
+                            <i class="fas fa-play-circle"></i> Demo Live
+                        </a>
+                        <a href="https://github.com/paulesthor/mathilde-v2" target="_blank" class="btn-action secondary">
+                            <i class="fab fa-github"></i> Code Source
+                        </a>
                     </div>
                 </div>
             </div>
