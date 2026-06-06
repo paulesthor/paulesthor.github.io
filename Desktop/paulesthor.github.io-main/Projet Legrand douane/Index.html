@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Legrand - Assistant Douanier IA</title>
+    
+    <script>
+        if (window.top !== window.self) {
+            document.write(
+                '<div style="display:flex; height:100vh; width:100vw; background:#f3f4f6; justify-content:center; align-items:center; font-family:sans-serif; flex-direction:column; text-align:center; padding:20px; box-sizing:border-box;">' +
+                    '<h2 style="color:#E2001A; font-size:24px; margin-bottom:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px;">Aperçu SharePoint Détecté</h2>' +
+                    '<p style="color:#4b5563; margin-bottom:30px; font-size:14px; max-width:500px; line-height:1.5;">Pour des raisons de sécurité, SharePoint bloque le chargement de l\'Intelligence Artificielle dans ce mode d\'aperçu. Veuillez ouvrir l\'application dans un nouvel onglet.</p>' +
+                    '<a href="' + window.location.href + '" target="_blank" style="background:#E2001A; color:white; padding:14px 28px; text-decoration:none; font-weight:bold; border-radius:4px; font-size:14px; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Ouvrir l\'Assistant Douane</a>' +
+                '</div>'
+            );
+            window.stop();
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+    <style>
+        .bg-legrand { background-color: #E2001A; }
+        .text-legrand { color: #E2001A; }
+        .border-legrand { border-color: #E2001A; }
+        .hover-bg-legrand:hover { background-color: #C10017; }
+        pre::-webkit-scrollbar { height: 8px; width: 8px; }
+        pre::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+    
+    <div class="bg-yellow-50 border-b border-yellow-200 py-1.5 text-center shadow-sm relative z-10">
+        <p class="text-xs font-bold text-yellow-700 uppercase tracking-widest" data-i18n="warning_banner">
+            Avertissement : Cet outil peut commettre des erreurs. L'expertise douanière humaine reste la référence.
+        </p>
+    </div>
+
+    <div class="bg-white border-b-4 border-legrand p-5 shadow-sm relative">
+        <!-- Language Selector -->
+        <div class="absolute top-6 right-5 flex space-x-2">
+            <button onclick="setLanguage('fr')" class="lang-btn px-2 py-1 bg-gray-200 hover:bg-gray-300 text-xs font-bold rounded" data-lang="fr">FR</button>
+            <button onclick="setLanguage('en')" class="lang-btn px-2 py-1 bg-gray-200 hover:bg-gray-300 text-xs font-bold rounded" data-lang="en">EN</button>
+            <button onclick="setLanguage('it')" class="lang-btn px-2 py-1 bg-gray-200 hover:bg-gray-300 text-xs font-bold rounded" data-lang="it">IT</button>
+        </div>
+
+        <div class="max-w-6xl mx-auto flex justify-between items-center pr-32">
+            <div class="flex items-center">
+                <span class="text-legrand font-black text-3xl tracking-tighter">LEGRAND</span>
+                <span class="text-gray-500 font-semibold text-lg uppercase tracking-widest border-l-2 border-gray-300 pl-4 ml-4" data-i18n="header_title">
+                    Assistant Douane
+                </span>
+            </div>
+            <span id="status-badge" class="bg-gray-200 text-gray-600 px-3 py-1 text-xs font-bold uppercase border border-gray-300 tracking-wider" data-i18n="status_searching">
+                Recherche de mémoire IA...
+            </span>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto mt-6">
+        
+        <!-- SECTION INIT MODIFIÉE (4 FICHIERS) -->
+        <div id="init-section" class="bg-white p-6 border border-gray-200 shadow-sm mb-6 rounded hidden">
+            <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4" data-i18n="init_title">1. Premier Démarrage : Chargement en mémoire</h2>
+            <p class="text-sm text-gray-600 mb-6" data-i18n="init_desc">Vous n'aurez à faire cette opération <b>qu'une seule fois</b>. Le navigateur mémorisera ensuite les modèles pour les prochaines ouvertures.</p>
+            
+            <div class="bg-gray-50 p-8 border-2 border-dashed border-gray-300 rounded text-center">
+                <h3 class="font-bold text-gray-800 text-md mb-4" data-i18n="init_upload_title">Sélectionnez les 4 fichiers du système</h3>
+                <p class="text-xs text-gray-500 mb-6">
+                    Fichiers requis : <span class="font-mono bg-white px-1 border rounded">modele_expert.onnx</span>, <span class="font-mono bg-white px-1 border rounded">config_expert.json</span>, 
+                    <span class="font-mono bg-white px-1 border rounded">modele_encyclopedie.onnx</span>, <span class="font-mono bg-white px-1 border rounded">config_encyclopedie.json</span>
+                </p>
+                <input type="file" id="files-all" multiple accept=".onnx,.json" class="block w-full max-w-md mx-auto text-sm text-gray-700 bg-white border border-gray-300 cursor-pointer p-2 rounded shadow-sm">
+                <button id="btn-load-ia" class="mt-8 bg-gray-800 text-white px-10 py-4 hover:bg-black text-sm uppercase font-bold transition rounded shadow-lg" data-i18n="btn_memorize">
+                    Mémoriser et Connecter le système
+                </button>
+            </div>
+        </div>
+
+        <div class="border-b border-gray-200 mb-4 flex space-x-8 px-2 overflow-x-auto">
+            <button onclick="switchTab('single')" id="btn-single" class="tab-btn pb-3 text-sm font-bold text-legrand border-b-2 border-legrand uppercase tracking-wide transition whitespace-nowrap" data-i18n="tab_single">Recherche Produit Unique</button>
+            <button onclick="switchTab('batch')" id="btn-batch" class="tab-btn pb-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 uppercase tracking-wide transition whitespace-nowrap" data-i18n="tab_batch">Analyse de Masse</button>
+            <button onclick="switchTab('maintenance')" id="btn-maintenance" class="tab-btn pb-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 uppercase tracking-wide transition whitespace-nowrap" data-i18n="tab_maintenance">Maintenance & Scripts</button>
+        </div>
+
+        <div class="bg-white p-8 border border-gray-200 shadow-sm rounded relative">
+            
+            <div id="lock-screen" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-20 flex flex-col justify-center items-center rounded text-center">
+                <p class="text-gray-800 font-bold text-lg mb-2" data-i18n="lock_title">Système en attente</p>
+                <p class="text-gray-500 text-sm" data-i18n="lock_desc">Veuillez charger les modèles IA dans l'encart supérieur pour déverrouiller l'outil.</p>
+            </div>
+
+            <div id="content-single" class="tab-content block">
+                <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6" data-i18n="single_title">Classification d'un produit unique</h2>
+                
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="col-span-2 space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="single_desc">Description Commerciale</label>
+                            <input type="text" id="single-desc" placeholder="Ex: RCCB RX3 4P 40A AC 30MA" class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-legrand rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="single_class">Classe Legrand</label>
+                            <input type="text" id="single-class" placeholder="Ex: LC000003 - Interrupteur différentiel" class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-legrand rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="single_etim">Spécifications ETIM</label>
+                            <textarea id="single-etim" rows="4" placeholder="Ex: current: 40 | voltage: 230" class="w-full border border-gray-300 p-2.5 text-sm focus:outline-none focus:border-legrand rounded"></textarea>
+                        </div>
+                        <button id="btn-predict-single" class="bg-gray-800 text-white px-6 py-2.5 hover:bg-black text-sm uppercase font-semibold transition w-full rounded shadow-sm" data-i18n="btn_analyze_single">
+                            Lancer l'analyse
+                        </button>
+                    </div>
+
+                    <div class="col-span-1">
+                        <div class="bg-gray-50 border border-gray-200 p-6 h-full flex flex-col justify-center items-center text-center rounded" id="single-result-box">
+                            <p class="text-gray-400 text-sm italic mb-2" data-i18n="single_result_ph">Le résultat s'affichera ici.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-batch" class="tab-content hidden">
+                <div id="step-2">
+                    <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4" data-i18n="batch_title">Analyse des données PIM (Exports Base de données)</h2>
+                    <p class="text-sm text-gray-600 mb-6" data-i18n="batch_desc">Fusionnez vos exports généraux et techniques. L'architecture hybride sécurise automatiquement les seuils douaniers mathématiques.</p>
+
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-50 p-6 border border-gray-200 rounded">
+                            <h3 class="font-bold text-gray-800 text-sm mb-2" data-i18n="batch_file_pim_title">A. Fichier PIM</h3>
+                            <p class="text-xs text-gray-500 mb-4" data-i18n="batch_file_pim_desc">Export contenant l'ID, le Libellé et la Classe.</p>
+                            <input type="file" id="file-pim" accept=".xlsx,.xls,.csv" class="block w-full text-xs text-gray-700 bg-white border border-gray-300 cursor-pointer p-1.5 rounded">
+                        </div>
+
+                        <div class="bg-gray-50 p-6 border border-gray-200 rounded">
+                            <h3 class="font-bold text-gray-800 text-sm mb-2" data-i18n="batch_file_etim_title">B. Fichiers ETIM</h3>
+                            <p class="text-xs text-gray-500 mb-4" data-i18n="batch_file_etim_desc">Export des caractéristiques techniques (facultatif).</p>
+                            <input type="file" id="files-etim" multiple accept=".xlsx,.xls,.csv" class="block w-full text-xs text-gray-700 bg-white border border-gray-300 cursor-pointer p-1.5 rounded">
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="btn-merge-analyze" class="bg-gray-800 text-white px-8 py-3 hover:bg-black text-sm uppercase font-bold transition rounded shadow-sm" data-i18n="btn_analyze_batch">
+                            Lancer l'Analyse de Masse
+                        </button>
+                        <p id="process-status" class="text-sm font-bold text-legrand mt-4 hidden">Initialisation...</p>
+                    </div>
+                </div>
+
+                <div id="results" class="mt-10 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800"><span data-i18n="report_title">Rapport d'analyse</span> (<span id="count-total" class="text-legrand">0</span> <span data-i18n="report_products">produits</span>)</h3>
+                        <button id="btn-export" class="bg-legrand text-white px-5 py-2 hover-bg-legrand text-sm uppercase font-semibold transition shadow-sm rounded" data-i18n="btn_export">
+                            Exporter vers Excel
+                        </button>
+                    </div>
+
+                    <div class="mb-5 bg-gray-50 border border-gray-200 p-4 rounded text-xs text-gray-600 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-2 uppercase tracking-wide" data-i18n="diag_title">Comprendre les diagnostics PIM</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div data-i18n="diag_match"><span class="font-bold text-green-600">Concordance :</span> L'IA valide le code existant.</div>
+                            <div data-i18n="diag_new"><span class="font-bold text-gray-500">Nouveau Produit :</span> Code PIM vide à remplir.</div>
+                            <div data-i18n="diag_sub"><span class="font-bold text-yellow-600">Conflit Sous-position :</span> Désaccord mineur (2 derniers chiffres).</div>
+                            <div data-i18n="diag_power"><span class="font-bold text-orange-500">Erreur (Puissance) :</span> Anomalie de puissance (Alim/Transfo).</div>
+                            <div data-i18n="diag_branch"><span class="font-bold text-orange-600">Conflit de Branche :</span> Divergence modérée (chiffres 5 et 6).</div>
+                            <div data-i18n="diag_major"><span class="font-bold text-red-600">Conflit Majeur :</span> Désaccord total sur la famille (4 premiers chiffres).</div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-200 rounded">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-100 text-gray-600 uppercase text-xs border-b border-gray-200">
+                                <tr>
+                                    <th class="p-3 w-4/12" data-i18n="th_desc">Description & Classe</th>
+                                    <th class="p-3" data-i18n="th_code">Code Système</th>
+                                    <th class="p-3" data-i18n="th_conf">Confiance</th>
+                                    <th class="p-3" data-i18n="th_diag">Diagnostic PIM</th>
+                                    <th class="p-3" data-i18n="th_status">Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="text-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-maintenance" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider" data-i18n="maint_title">Documentation & Scripts de Maintenance</h2>
+                    <button id="btn-clear-cache" class="bg-red-100 text-red-700 px-4 py-2 border border-red-300 hover:bg-red-200 text-xs font-bold uppercase transition rounded" data-i18n="btn_clear_cache">
+                        Vider la mémoire du système
+                    </button>
+                </div>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded shadow-sm mb-8">
+                    <h3 class="font-bold text-gray-800 mb-2 flex items-center" data-i18n="maint_rules_title">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Moteur de Règles (Hardcoding) & Évolutions
+                    </h3>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-3" data-i18n="maint_rules_desc1">
+                        Si vous constatez que l'IA échoue systématiquement sur une famille de produits spécifique malgré des données PIM claires, il est possible d'ajouter une règle logique 'en dur'. Condition stricte : Cet ajout n'est réalisable que si la classe concernée ne possède que 1, 2 ou 3 codes douaniers possibles au maximum.
+                    </p>
+                    <p class="text-sm text-gray-800 font-medium" data-i18n="maint_rules_desc2">
+                        Si vous identifiez d'autres exceptions douanières ou règles de classement inflexibles qui doivent être ajoutées 'en dur' al motore, contattami direttamente.
+                    </p>
+                </div>
+
+                <p class="text-sm text-gray-600 mb-8 leading-relaxed" data-i18n="maint_intro">Cette section regroupe les outils techniques nécessaires pour mettre à jour les modèles d'analyse lorsque la base de données douanière évolue structurellement.</p>
+
+                <div class="mb-10">
+                    <h3 class="text-md font-bold text-gray-800 border-b-2 border-legrand inline-block pb-1 mb-3" data-i18n="step1_title">Étape 1 : Fusion ETIM et PIM (Archivage)</h3>
+                    <p class="text-sm text-gray-600 mb-3" data-i18n="step1_desc"><b>Note :</b> Cette opération est désormais gérée nativement dans l'onglet 'Analyse en Masse'. Ce script Python est conservé ici pour archivage.</p>
+                    <pre class="bg-gray-800 text-gray-100 p-4 rounded text-xs overflow-x-auto border border-gray-700 shadow-inner"><code>import pandas as pd
+import time
+import os
+import tkinter as tk
+from tkinter import filedialog
+
+def preparer_fichier_web():
+    root = tk.Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
+
+    print("DÉMARRAGE DE LA FUSION (MODE MULTI-ETIM)...")
+
+    print("\n[1/4] En attente de la sélection des fichiers ETIM...")
+    fichiers_etim = filedialog.askopenfilenames(
+        title="1. Sélectionner les fichiers ETIM (Format : Technical data per line)",
+        filetypes=[("Fichiers Excel", "*.xlsx *.xls")]
+    )
+    
+    if not fichiers_etim: return
+    
+    print("\n[2/4] En attente de la sélection du fichier PIM géant...")
+    fichier_pim = filedialog.askopenfilename(
+        title="2. Sélectionner le fichier PIM (Format : Current view)",
+        filetypes=[("Fichiers Excel", "*.xlsx *.xls")]
+    )
+    
+    if not fichier_pim: return
+
+    dossier_sortie = os.path.dirname(fichier_pim)
+    fichier_sortie = os.path.join(dossier_sortie, "Produits_Prets_Pour_IA.xlsx")
+    start_time = time.time()
+
+    liste_df_etim = []
+    for f in fichiers_etim:
+        temp_df = pd.read_excel(f, dtype=str)
+        liste_df_etim.append(temp_df)
+    
+    df_etim = pd.concat(liste_df_etim, ignore_index=True)
+    
+    df_etim['INFO_COMPLETE'] = df_etim['FEATUREID'] + ": " + df_etim['FVALUE']
+    df_etim_groupe = df_etim.groupby('MARQUE')['INFO_COMPLETE'].apply(lambda x: ' | '.join(x.dropna())).reset_index()
+    df_etim_groupe.rename(columns={'INFO_COMPLETE': 'SPECIFICATIONS_ETIM'}, inplace=True)
+    
+    ids_valides = df_etim_groupe['MARQUE'].unique()
+
+    df_pim = pd.read_excel(fichier_pim, dtype=str)
+    df_pim_filtre = df_pim[df_pim['<ID>'].isin(ids_valides)].copy()
+    df_final = pd.merge(df_pim_filtre, df_etim_groupe, left_on='<ID>', right_on='MARQUE', how='inner')
+
+    df_final = df_final[df_final['Code Douane'].notna()]
+    df_final = df_final[df_final['Code Douane'].astype(str).str.strip() != ""]
+
+    df_export = df_final[['Code Douane', '<ID>', 'LFLG0254- Description (80 car) (EN)', 'Class Legrand', 'SPECIFICATIONS_ETIM']].copy()
+    df_export.rename(columns={'<ID>': 'ID_PRODUIT', 'LFLG0254- Description (80 car) (EN)': 'DESCRIPTION_COMMERCIALE', 'Class Legrand': 'CLASS LEGRAND'}, inplace=True)
+    df_export.to_excel(fichier_sortie, index=False)
+
+    print(f"TERMINÉ en {round(time.time() - start_time, 1)} secondes !")
+
+if __name__ == "__main__":
+    preparer_fichier_web()</code></pre>
+                </div>
+
+                <div class="mb-10">
+                    <h3 class="text-md font-bold text-gray-800 border-b-2 border-legrand inline-block pb-1 mb-3">Étape 2 : Entraînement Modèle Encyclopédie (Seuil 3)</h3>
+                    <p class="text-sm text-gray-600 mb-3">Génère le modèle d'analyse large. Nécessite le fichier Excel fusionné issu de l'étape 1.</p>
+                    <pre class="bg-gray-800 text-gray-100 p-4 rounded text-xs overflow-x-auto border border-gray-700 shadow-inner"><code>import pandas as pd
+import numpy as np
+import json
+import zipfile
+import re
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.utils.class_weight import compute_sample_weight
+import xgboost as xgb
+import onnxmltools
+from onnxmltools.convert.common.data_types import FloatTensorType
+
+FICHIER_ENTRAINEMENT = "Produits_Prets_Pour_IA.xlsx"
+MAX_FEATURES = 5000 
+
+def pipeline_entrainement_encyclopedie():
+    df = pd.read_excel(FICHIER_ENTRAINEMENT, dtype=str).fillna("")
+    col_douane = [c for c in df.columns if 'DOUANE' in c.upper() or 'SH' in c.upper()][0]
+    
+    comptage = df[col_douane].value_counts()
+    df = df[df[col_douane].isin(comptage[comptage >= 3].index)]
+
+    def preparer_texte(row):
+        etim_boost = row.get('SPECIFICATIONS_ETIM', '').lower()
+        for c in ['material', 'matiere', 'thermoplastic', 'voltage', 'tension', '230v', 'current', 'courant', 'ampere', 'pole', 'mounting', 'type']:
+            if c in etim_boost: etim_boost += f" {c} {c} {c}"
+        texte_brut = f"class {row.get('CLASS LEGRAND', '')} class {row.get('CLASS LEGRAND', '')} desc {row.get('DESCRIPTION_COMMERCIALE', '')} {etim_boost}".lower()
+        return re.sub(r'[^\w\s]', ' ', texte_brut)
+
+    df['TEXTE_ML'] = df.apply(preparer_texte, axis=1)
+
+    vectorizer = TfidfVectorizer(max_features=MAX_FEATURES, ngram_range=(1, 2), token_pattern=r"(?u)\b\w+\b")
+    X_dense = vectorizer.fit_transform(df['TEXTE_ML']).toarray() 
+    
+    le = LabelEncoder()
+    y = le.fit_transform(df[col_douane])
+    X_train, X_test, y_train, y_test = train_test_split(X_dense, y, test_size=0.2, random_state=42, stratify=y)
+
+    modele = xgb.XGBClassifier(objective='multi:softprob', eval_metric='mlogloss', tree_method='hist', n_estimators=100, learning_rate=0.1, max_delta_step=1, early_stopping_rounds=10, random_state=42, n_jobs=-1)
+    modele.fit(X_train, y_train, sample_weight=compute_sample_weight('balanced', y=y_train), eval_set=[(X_train, y_train), (X_test, y_test)], verbose=10)
+
+    onx = onnxmltools.convert_xgboost(modele, initial_types=[('float_input', FloatTensorType([None, MAX_FEATURES]))], target_opset=12)
+    with open("modele_encyclopedie.onnx", "wb") as f: f.write(onx.SerializeToString())
+    
+    with open('config_encyclopedie.json', 'w') as f: json.dump({'vocabulaire': {str(k): int(v) for k, v in vectorizer.vocabulary_.items()}, 'idf': vectorizer.idf_.tolist(), 'codes_sh': le.classes_.astype(str).tolist()}, f)
+
+if __name__ == "__main__": pipeline_entrainement_encyclopedie()</code></pre>
+                </div>
+
+                <div>
+                    <h3 class="text-md font-bold text-gray-800 border-b-2 border-legrand inline-block pb-1 mb-3">Étape 3 : Entraînement Modèle Expert (Seuil 100)</h3>
+                    <p class="text-sm text-gray-600 mb-3">Génère le modèle de haute précision. Identique à l'étape 2, à l'exception du filtre exigeant un minimum de 100 occurrences historiques.</p>
+                    <pre class="bg-gray-800 text-gray-100 p-4 rounded text-xs overflow-x-auto border border-gray-700 shadow-inner"><code>import pandas as pd
+# ... (Imports identiques à l'étape 2)
+
+FICHIER_ENTRAINEMENT = "Produits_Prets_Pour_IA.xlsx"
+MAX_FEATURES = 5000 
+
+def pipeline_entrainement_expert():
+    df = pd.read_excel(FICHIER_ENTRAINEMENT, dtype=str).fillna("")
+    col_douane = [c for c in df.columns if 'DOUANE' in c.upper() or 'SH' in c.upper()][0]
+    
+    comptage = df[col_douane].value_counts()
+    df = df[df[col_douane].isin(comptage[comptage >= 100].index)] # SEUIL 100
+
+    # ... (Reste du traitement identique à l'Etape 2) ...
+
+    onx = onnxmltools.convert_xgboost(modele, initial_types=[('float_input', FloatTensorType([None, MAX_FEATURES]))], target_opset=12)
+    with open("modele_expert.onnx", "wb") as f: f.write(onx.SerializeToString())
+    with open('config_expert.json', 'w') as f: json.dump({'vocabulaire': {str(k): int(v) for k, v in vectorizer.vocabulary_.items()}, 'idf': vectorizer.idf_.tolist(), 'codes_sh': le.classes_.astype(str).tolist()}, f)
+
+if __name__ == "__main__": pipeline_entrainement_expert()</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // GESTION DU MULTILINGUISME (I18N)
+        // =========================================================================
+        const translations = {
+            fr: {
+                warning_banner: "Avertissement : Cet outil peut commettre des erreurs. L'expertise douanière humaine reste la référence.",
+                header_title: "Assistant Douane",
+                status_searching: "Recherche de mémoire IA...",
+                status_connected: "Système Connecté",
+                status_disconnected: "Système Déconnecté",
+                status_error_cache: "Erreur Cache",
+                init_title: "1. Premier Démarrage : Chargement en mémoire",
+                init_desc: "Vous n'aurez à faire cette opération <b>qu'une seule fois</b>. Le navigateur mémorisera ensuite les modèles pour les prochaines ouvertures.",
+                init_upload_title: "Sélectionnez les 4 fichiers du système",
+                btn_memorize: "Mémoriser et Connecter le système",
+                btn_memorizing: "Mémorisation...",
+                tab_single: "Recherche Produit Unique",
+                tab_batch: "Analyse de Masse",
+                tab_maintenance: "Maintenance & Scripts",
+                lock_title: "Système en attente",
+                lock_desc: "Veuillez charger les modèles IA dans l'encart supérieur pour déverrouiller l'outil.",
+                single_title: "Classification d'un produit unique",
+                single_desc: "Description Commerciale",
+                single_class: "Classe Legrand",
+                single_etim: "Spécifications ETIM",
+                btn_analyze_single: "Lancer l'analyse",
+                single_result_ph: "Le résultat s'affichera ici.",
+                batch_title: "Analyse des données PIM (Exports Base de données)",
+                batch_desc: "Fusionnez vos exports généraux et techniques. L'architecture hybride sécurise automatiquement les seuils douaniers mathématiques.",
+                batch_file_pim_title: "A. Fichier PIM",
+                batch_file_pim_desc: "Export contenant l'ID, le Libellé et la Classe.",
+                batch_file_etim_title: "B. Fichiers ETIM",
+                batch_file_etim_desc: "Export des caractéristiques techniques (facultatif).",
+                btn_analyze_batch: "Lancer l'Analyse de Masse",
+                report_title: "Rapport d'analyse",
+                report_products: "produits",
+                btn_export: "Exporter vers Excel",
+                diag_title: "Comprendre les diagnostics PIM",
+                diag_match: '<span class="font-bold text-green-600">Concordance :</span> L\'IA valide le code existant.',
+                diag_new: '<span class="font-bold text-gray-500">Nouveau Produit :</span> Code PIM vide à remplir.',
+                diag_sub: '<span class="font-bold text-yellow-600">Conflit Sous-position :</span> Désaccord mineur (2 derniers chiffres).',
+                diag_power: '<span class="font-bold text-orange-500">Erreur (Puissance) :</span> Anomalie de puissance (Alim/Transfo).',
+                diag_branch: '<span class="font-bold text-orange-600">Conflit de Branche :</span> Divergence modérée (chiffres 5 et 6).',
+                diag_major: '<span class="font-bold text-red-600">Conflit Majeur :</span> Désaccord total sur la famille (4 premiers chiffres).',
+                th_desc: "Description & Classe",
+                th_code: "Code Système",
+                th_conf: "Confiance",
+                th_diag: "Diagnostic PIM",
+                th_status: "Statut",
+                maint_title: "Documentation & Scripts de Maintenance",
+                btn_clear_cache: "Vider la mémoire du système",
+                maint_rules_title: "Moteur de Règles (Hardcoding) & Évolutions",
+                maint_rules_desc1: "Si vous constatez que l'IA échoue systématiquement sur une famille de produits spécifique malgré des données PIM claires, il est possible d'ajouter une règle logique 'en dur'. Condition stricte : Cet ajout n'est réalisable que si la classe concernée ne possède que 1, 2 ou 3 codes douaniers possibles au maximum.",
+                maint_rules_desc2: "Si vous identifiez d'autres exceptions douanières ou règles de classement inflexibles qui doivent être ajoutées 'en dur' au moteur, merci de me contacter directement.",
+                maint_intro: "Cette section regroupe les outils techniques nécessaires pour mettre à jour les modèles d'analyse lorsque la base de données douanière évolue structurellement.",
+                step1_title: "Étape 1 : Fusion ETIM et PIM (Archivage)",
+                step1_desc: "<b>Note :</b> Cette opération est désormais gérée nativement dans l'onglet 'Analyse en Masse'. Ce script Python est conservé ici pour archivage.",
+                alert_select_4: "Veuillez sélectionner les 4 fichiers (.onnx et .json) en une seule fois.",
+                alert_invalid_type: "Types de fichiers invalides.",
+                alert_clear_cache: "Voulez-vous vraiment vider la mémoire du système ? Vous devrez recharger les 4 fichiers au prochain redémarrage.",
+                alert_select_pim: "Veuillez sélectionner le fichier PIM.",
+                alert_select_etim: "Veuillez sélectionner au moins un fichier ETIM.",
+                analysis_in_progress: "Analyse en cours...",
+                result_source: "Source utilisée :",
+                result_status: "Statut :",
+                step_1_reading: "Étape 1/3 : Lecture des données techniques...",
+                step_2_merging: "Étape 2/3 : Fusion avec les données générales...",
+                step_3_analyzing: "Étape 3/3 : Analyse IA en cours...",
+                status_certified: "Certifié",
+                status_certified_rule: "Certifié (Règle)",
+                status_conflict_ia: "Conflit IA",
+                status_to_validate: "À valider",
+                status_human_expert: "Expertise Humaine",
+                res_match: "Concordance",
+                res_new: "Nouveau Produit",
+                res_sub: "Conflit Sous-position",
+                res_power: "Erreur (Puissance)",
+                res_branch: "Conflit de Branche",
+                res_major: "Conflit Majeur",
+                no_desc: "Sans desc."
+            },
+            en: {
+                warning_banner: "Warning: This tool may make mistakes. Human customs expertise remains the reference.",
+                header_title: "Customs Assistant",
+                status_searching: "Searching AI memory...",
+                status_connected: "System Connected",
+                status_disconnected: "System Disconnected",
+                status_error_cache: "Cache Error",
+                init_title: "1. First Start: Loading into memory",
+                init_desc: "You only need to do this operation <b>once</b>. The browser will then remember the models for future sessions.",
+                init_upload_title: "Select all 4 system files",
+                btn_memorize: "Memorize and Connect system",
+                btn_memorizing: "Memorizing...",
+                tab_single: "Single Product Search",
+                tab_batch: "Batch Analysis",
+                tab_maintenance: "Maintenance & Scripts",
+                lock_title: "System on standby",
+                lock_desc: "Please load the AI models in the top section to unlock the tool.",
+                single_title: "Single product classification",
+                single_desc: "Commercial Description",
+                single_class: "Legrand Class",
+                single_etim: "ETIM Specifications",
+                btn_analyze_single: "Run analysis",
+                single_result_ph: "The result will be displayed here.",
+                batch_title: "PIM Data Analysis (Database Exports)",
+                batch_desc: "Merge your general and technical exports. The hybrid architecture automatically secures mathematical customs thresholds.",
+                batch_file_pim_title: "A. PIM File",
+                batch_file_pim_desc: "Export containing ID, Label and Class.",
+                batch_file_etim_title: "B. ETIM Files",
+                batch_file_etim_desc: "Technical characteristics export (optional).",
+                btn_analyze_batch: "Run Batch Analysis",
+                report_title: "Analysis Report",
+                report_products: "products",
+                btn_export: "Export to Excel",
+                diag_title: "Understanding PIM diagnostics",
+                diag_match: '<span class="font-bold text-green-600">Match:</span> AI validates existing code.',
+                diag_new: '<span class="font-bold text-gray-500">New Product:</span> Empty PIM code to fill.',
+                diag_sub: '<span class="font-bold text-yellow-600">Sub-heading Conflict:</span> Minor disagreement (last 2 digits).',
+                diag_power: '<span class="font-bold text-orange-500">Error (Power):</span> Power anomaly (Power supply/Transformer).',
+                diag_branch: '<span class="font-bold text-orange-600">Branch Conflict:</span> Moderate divergence (digits 5 and 6).',
+                diag_major: '<span class="font-bold text-red-600">Major Conflict:</span> Total disagreement on family (first 4 digits).',
+                th_desc: "Description & Class",
+                th_code: "System Code",
+                th_conf: "Confidence",
+                th_diag: "PIM Diagnostic",
+                th_status: "Status",
+                maint_title: "Maintenance Documentation & Scripts",
+                btn_clear_cache: "Clear system memory",
+                maint_rules_title: "Rules Engine (Hardcoding) & Evolutions",
+                maint_rules_desc1: "If you notice that the AI systematically fails on a specific product family despite clear PIM data, it is possible to add a 'hardcoded' logical rule. Strict condition: This addition is only feasible if the concerned class has a maximum of 1, 2, or 3 possible customs codes.",
+                maint_rules_desc2: "If you identify other customs exceptions or inflexible classification rules that must be 'hardcoded' into the engine, please contact me directly.",
+                maint_intro: "This section contains the technical tools necessary to update the analysis models when the customs database structurally evolves.",
+                step1_title: "Step 1: ETIM and PIM Merge (Archive)",
+                step1_desc: "<b>Note:</b> This operation is now natively managed in the 'Batch Analysis' tab. This Python script is kept here for archiving purposes.",
+                alert_select_4: "Please select all 4 files (.onnx and .json) at once.",
+                alert_invalid_type: "Invalid file types.",
+                alert_clear_cache: "Do you really want to clear the system memory? You will need to reload the 4 files at the next startup.",
+                alert_select_pim: "Please select the PIM file.",
+                alert_select_etim: "Please select at least one ETIM file.",
+                analysis_in_progress: "Analysis in progress...",
+                result_source: "Source used:",
+                result_status: "Status:",
+                step_1_reading: "Step 1/3: Reading technical data...",
+                step_2_merging: "Step 2/3: Merging with general data...",
+                step_3_analyzing: "Step 3/3: AI analysis in progress...",
+                status_certified: "Certified",
+                status_certified_rule: "Certified (Rule)",
+                status_conflict_ia: "AI Conflict",
+                status_to_validate: "To validate",
+                status_human_expert: "Human Expertise",
+                res_match: "Match",
+                res_new: "New Product",
+                res_sub: "Sub-heading Conflict",
+                res_power: "Error (Power)",
+                res_branch: "Branch Conflict",
+                res_major: "Major Conflict",
+                no_desc: "No desc."
+            },
+            it: {
+                warning_banner: "Avvertenza: Questo strumento può commettere errori. L'esperienza doganale umana rimane il riferimento.",
+                header_title: "Assistente Doganale",
+                status_searching: "Ricerca memoria IA...",
+                status_connected: "Sistema Connesso",
+                status_disconnected: "Sistema Disconnesso",
+                status_error_cache: "Errore Cache",
+                init_title: "1. Primo Avvio: Caricamento in memoria",
+                init_desc: "Dovrai fare questa operazione <b>solo una volta</b>. Il browser ricorderà i modelli per le sessioni future.",
+                init_upload_title: "Seleziona i 4 file di sistema",
+                btn_memorize: "Memorizza e Connetti il sistema",
+                btn_memorizing: "Memorizzazione in corso...",
+                tab_single: "Ricerca Prodotto Singolo",
+                tab_batch: "Analisi di Massa",
+                tab_maintenance: "Manutenzione & Script",
+                lock_title: "Sistema in attesa",
+                lock_desc: "Carica i modelli IA nella sezione superiore per sbloccare lo strumento.",
+                single_title: "Classificazione di un singolo prodotto",
+                single_desc: "Descrizione Commerciale",
+                single_class: "Classe Legrand",
+                single_etim: "Specifiche ETIM",
+                btn_analyze_single: "Avvia analisi",
+                single_result_ph: "Il risultato verrà visualizzato qui.",
+                batch_title: "Analisi Dati PIM (Esportazioni Database)",
+                batch_desc: "Unisci le tue esportazioni generali e tecniche. L'architettura ibrida protegge automaticamente le soglie doganali matematiche.",
+                batch_file_pim_title: "A. File PIM",
+                batch_file_pim_desc: "Esportazione contenente ID, Etichetta e Classe.",
+                batch_file_etim_title: "B. File ETIM",
+                batch_file_etim_desc: "Esportazione caratteristiche tecniche (opzionale).",
+                btn_analyze_batch: "Avvia Analisi di Massa",
+                report_title: "Rapporto di Analisi",
+                report_products: "prodotti",
+                btn_export: "Esporta in Excel",
+                diag_title: "Comprendere i diagnostici PIM",
+                diag_match: '<span class="font-bold text-green-600">Concordanza:</span> L\'IA convalida il codice esistente.',
+                diag_new: '<span class="font-bold text-gray-500">Nuovo Prodotto:</span> Codice PIM vuoto da compilare.',
+                diag_sub: '<span class="font-bold text-yellow-600">Conflitto Sottovoce:</span> Lieve disaccordo (ultime 2 cifre).',
+                diag_power: '<span class="font-bold text-orange-500">Errore (Potenza):</span> Anomalia di potenza (Alim/Trasf).',
+                diag_branch: '<span class="font-bold text-orange-600">Conflitto di Ramo:</span> Divergenza moderata (cifre 5 e 6).',
+                diag_major: '<span class="font-bold text-red-600">Conflitto Maggiore:</span> Disaccordo totale sulla famiglia (prime 4 cifre).',
+                th_desc: "Descrizione & Classe",
+                th_code: "Codice Sistema",
+                th_conf: "Fiducia",
+                th_diag: "Diagnostica PIM",
+                th_status: "Stato",
+                maint_title: "Documentazione & Script di Manutenzione",
+                btn_clear_cache: "Svuota memoria di sistema",
+                maint_rules_title: "Motore di Regole (Hardcoding) & Evoluzioni",
+                maint_rules_desc1: "Se noti che l'IA fallisce sistematicamente su una famiglia di prodotti specifica nonostante dati PIM chiari, è possibile aggiungere una regola logica 'hardcoded'. Condizione rigorosa: questa aggiunta è fattibile solo se la classe interessata ha un massimo di 1, 2 o 3 possibili codici doganali.",
+                maint_rules_desc2: "Se identifichi altre eccezioni doganali o regole di classificazione inflessibili che devono essere aggiunte 'hardcoded' al motore, contattami direttamente.",
+                maint_intro: "Questa sezione raggruppa gli strumenti tecnici necessari per aggiornare i modelli di analisi quando il database doganale si evolve strutturalmente.",
+                step1_title: "Fase 1: Fusione ETIM e PIM (Archivio)",
+                step1_desc: "<b>Nota:</b> Questa operazione è ora gestita nativamente nella scheda 'Analisi di Massa'. Questo script Python è conservato qui per scopi di archiviazione.",
+                alert_select_4: "Seleziona tutti e 4 i file (.onnx e .json) contemporaneamente.",
+                alert_invalid_type: "Tipi di file non validi.",
+                alert_clear_cache: "Vuoi davvero svuotare la memoria del sistema? Dovrai ricaricare i 4 file al prossimo avvio.",
+                alert_select_pim: "Si prega di selezionare il file PIM.",
+                alert_select_etim: "Si prega di selezionare almeno un file ETIM.",
+                analysis_in_progress: "Analisi in corso...",
+                result_source: "Fonte utilizzata:",
+                result_status: "Stato:",
+                step_1_reading: "Passo 1/3: Lettura dati tecnici...",
+                step_2_merging: "Passo 2/3: Fusione con dati generali...",
+                step_3_analyzing: "Passo 3/3: Analisi IA in corso...",
+                status_certified: "Certificato",
+                status_certified_rule: "Certificato (Regola)",
+                status_conflict_ia: "Conflitto IA",
+                status_to_validate: "Da convalidare",
+                status_human_expert: "Competenza Umana",
+                res_match: "Concordanza",
+                res_new: "Nuovo Prodotto",
+                res_sub: "Conflitto Sottovoce",
+                res_power: "Errore (Potenza)",
+                res_branch: "Conflitto di Ramo",
+                res_major: "Conflitto Maggiore",
+                no_desc: "Senza desc."
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'fr';
+
+        function t(key) {
+            return translations[currentLang][key] || translations['fr'][key] || key;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('appLang', lang);
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if(btn.dataset.lang === lang) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-800');
+                    btn.classList.add('bg-legrand', 'text-white');
+                } else {
+                    btn.classList.add('bg-gray-200', 'text-gray-800');
+                    btn.classList.remove('bg-legrand', 'text-white');
+                }
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.innerHTML = translations[currentLang][key];
+                }
+            });
+
+            const sb = document.getElementById('status-badge');
+            if(sb.innerText.includes('...') || sb.innerText.includes('Connect')) {
+                if(sessionExpert) sb.innerText = t('status_connected');
+                else sb.innerText = t(sb.innerText.includes('Erreur') ? 'status_error_cache' : 'status_searching');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => setLanguage(currentLang));
+
+        // =========================================================================
+        // IA ET LOGIQUE METIER
+        // =========================================================================
+        ort.env.wasm.numThreads = 1;
+        let sessionExpert = null; let configExpert = null;
+        let sessionEncyclo = null; let configEncyclo = null;
+        let finalData = [];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-legrand', 'text-legrand', 'font-bold');
+                el.classList.add('border-transparent', 'text-gray-500', 'font-medium');
+            });
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).classList.remove('border-transparent', 'text-gray-500', 'font-medium');
+            document.getElementById('btn-' + tabId).classList.add('border-legrand', 'text-legrand', 'font-bold');
+        }
+        
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const hasModels = await localforage.getItem('models_saved');
+                if (hasModels) {
+                    document.getElementById('status-badge').innerText = t('status_searching');
+                    const onnxExpert = await localforage.getItem('modele_expert_onnx');
+                    const jsonExpert = await localforage.getItem('config_expert_json');
+                    const onnxEncyclo = await localforage.getItem('modele_encyclo_onnx');
+                    const jsonEncyclo = await localforage.getItem('config_encyclo_json');
+                    sessionExpert = await ort.InferenceSession.create(onnxExpert);
+                    configExpert = jsonExpert;
+                    sessionEncyclo = await ort.InferenceSession.create(onnxEncyclo);
+                    configEncyclo = jsonEncyclo;
+                    unlockSystem();
+                } else {
+                    document.getElementById('status-badge').innerText = t('status_disconnected');
+                    document.getElementById('init-section').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error("Erreur de lecture du cache :", e);
+                document.getElementById('status-badge').innerText = t('status_error_cache');
+                document.getElementById('init-section').classList.remove('hidden');
+            }
+        });
+
+        // CHARGEMENT IA: 4 FICHIERS SIMULTANES
+        document.getElementById('btn-load-ia').addEventListener('click', async () => {
+            const files = document.getElementById('files-all').files;
+            
+            if (files.length !== 4) {
+                alert(t('alert_select_4'));
+                return;
+            }
+
+            const btn = document.getElementById('btn-load-ia');
+            btn.innerText = t('btn_memorizing');
+            btn.disabled = true;
+
+            try {
+                let onnxExpert, jsonExpert, onnxEncyclo, jsonEncyclo;
+
+                for (let f of files) {
+                    const name = f.name.toLowerCase();
+                    if (name.includes('expert') && name.endsWith('.onnx')) onnxExpert = await f.arrayBuffer();
+                    else if (name.includes('expert') && name.endsWith('.json')) jsonExpert = JSON.parse(await f.text());
+                    else if ((name.includes('encyclo') || name.includes('encyclopedie')) && name.endsWith('.onnx')) onnxEncyclo = await f.arrayBuffer();
+                    else if ((name.includes('encyclo') || name.includes('encyclopedie')) && name.endsWith('.json')) jsonEncyclo = JSON.parse(await f.text());
+                }
+
+                if (!onnxExpert || !jsonExpert || !onnxEncyclo || !jsonEncyclo) {
+                    throw new Error(t('alert_invalid_type'));
+                }
+
+                sessionExpert = await ort.InferenceSession.create(onnxExpert);
+                configExpert = jsonExpert;
+                sessionEncyclo = await ort.InferenceSession.create(onnxEncyclo);
+                configEncyclo = jsonEncyclo;
+
+                await localforage.setItem('modele_expert_onnx', onnxExpert);
+                await localforage.setItem('config_expert_json', jsonExpert);
+                await localforage.setItem('modele_encyclo_onnx', onnxEncyclo);
+                await localforage.setItem('config_encyclo_json', jsonEncyclo);
+                await localforage.setItem('models_saved', true);
+
+                unlockSystem();
+            } catch (e) {
+                alert("Erreur: " + e.message);
+                btn.innerText = t('btn_memorize');
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById('btn-clear-cache').addEventListener('click', async () => {
+            if(confirm(t('alert_clear_cache'))) {
+                await localforage.clear();
+                location.reload();
+            }
+        });
+
+        function unlockSystem() {
+            document.getElementById('status-badge').innerText = t('status_connected');
+            document.getElementById('status-badge').className = "bg-green-100 text-green-800 px-3 py-1 text-xs font-bold uppercase border border-green-300 tracking-wider";
+            document.getElementById('init-section').classList.add('hidden'); 
+            document.getElementById('lock-screen').classList.add('hidden'); 
+        }
+
+        function normaliserCode(code) {
+            if (!code) return "";
+            let c = String(code).trim().replace(/\.0$/, '');
+            c = c.replace(/\D/g, ''); 
+            if (c.length >= 8) return c.substring(0, 8); 
+            return c;
+        }
+
+        function vectorizeText(text, config) {
+            const vocab = config.vocabulaire; const idf = config.idf; const size = idf.length;
+            const vec = new Float32Array(size).fill(0);
+            if (!text) return vec;
+            const words = text.toLowerCase().match(/[\p{L}\p{N}_]+/gu) || [];
+            words.forEach(w => { if(vocab[w] !== undefined) vec[vocab[w]] += 1; });
+            for(let i = 0; i < words.length - 1; i++) {
+                const bg = words[i] + " " + words[i+1];
+                if(vocab[bg] !== undefined) vec[vocab[bg]] += 1;
+            }
+            for(let i = 0; i < size; i++) { if(vec[i] > 0) vec[i] *= idf[i]; }
+            let sumSq = 0; for(let i = 0; i < size; i++) sumSq += vec[i] * vec[i];
+            const norm = Math.sqrt(sumSq);
+            if(norm > 0) { for(let i = 0; i < size; i++) vec[i] /= norm; }
+            return vec;
+        }
+
+        async function runInference(session, config, text) {
+            const inputTensor = new ort.Tensor('float32', vectorizeText(text, config), [1, config.idf.length]);
+            const results = await session.run({ float_input: inputTensor });
+            
+            let probs = [];
+            if (results.probabilities.data) probs = results.probabilities.data;
+            else if (Array.isArray(results.probabilities) && results.probabilities[0] instanceof Map) {
+                let map = results.probabilities[0];
+                for(let k=0; k < config.codes_sh.length; k++) probs.push(map.get(k) || map.get(BigInt(k)) || 0);
+            }
+
+            let groupedProbs = new Map();
+            for (let j = 0; j < probs.length; j++) {
+                let rawCode = config.codes_sh[j];
+                let cleanCode = normaliserCode(rawCode);
+                if (cleanCode) {
+                    let currentScore = groupedProbs.get(cleanCode) || 0;
+                    groupedProbs.set(cleanCode, currentScore + probs[j]);
+                }
+            }
+
+            let bestCode = "";
+            let maxS = 0;
+            groupedProbs.forEach((score, code) => {
+                if (score > maxS) {
+                    maxS = score;
+                    bestCode = code;
+                }
+            });
+
+            return { code: bestCode, score: maxS };
+        }
+
+        async function solveHybrid(desc, classe, etim) {
+            let estDifferentiel = classe.toUpperCase().includes('LC000003');
+            let matchAmperage = (desc + " " + etim).match(/\b(\d+)\s*A\b/i);
+
+            if (estDifferentiel && matchAmperage) {
+                let amperage = parseInt(matchAmperage[1], 10);
+                return { 
+                    code: (amperage <= 16) ? "85363010" : "85363030", 
+                    score: 1.0, 
+                    source: "Moteur de Règles (LC000003)", 
+                    statut: "status_certified_rule"
+                };
+            }
+            return null; 
+        }
+
+        document.getElementById('btn-predict-single').addEventListener('click', async () => {
+            if (!sessionExpert || !sessionEncyclo) return;
+            
+            const desc = document.getElementById('single-desc').value || "";
+            const classe = document.getElementById('single-class').value || "";
+            const etim = document.getElementById('single-etim').value || "";
+            const box = document.getElementById('single-result-box');
+            
+            if(!desc && !classe && !etim) return;
+
+            box.innerHTML = `<p class="text-gray-600 font-medium">${t('analysis_in_progress')}</p>`;
+
+            let hybrid = await solveHybrid(desc, classe, etim);
+            let codeFinal, scoreFinal, source, statut, color;
+
+            if (hybrid) {
+                codeFinal = hybrid.code; 
+                scoreFinal = hybrid.score; 
+                source = hybrid.source; 
+                statut = hybrid.statut; 
+                color = "text-green-600";
+            } else {
+                let etimBoost = etim.toLowerCase();
+                const criteres = ['material', 'matiere', 'thermoplastic', 'voltage', 'tension', '230v', 'current', 'courant', 'ampere', 'pole', 'mounting', 'type'];
+                criteres.forEach(c => { if (etimBoost.includes(c)) etimBoost += ` ${c} ${c} ${c}`; });
+                let textePIM = `class ${classe} class ${classe} desc ${desc} ${etimBoost}`.trim();
+
+                let resExp = await runInference(sessionExpert, configExpert, textePIM);
+                let resEnc = await runInference(sessionEncyclo, configEncyclo, textePIM);
+                
+                codeFinal = resExp.code; 
+                scoreFinal = resExp.score; 
+                source = "IA Expert"; 
+                statut = scoreFinal > 0.95 ? "status_certified" : "status_to_validate"; 
+                color = scoreFinal > 0.95 ? "text-green-600" : "text-orange-600";
+                
+                if (resExp.code !== resEnc.code && resEnc.score > 0.60) { 
+                    codeFinal = resEnc.code; 
+                    scoreFinal = resEnc.score; 
+                    source = "IA Encyclopédie"; 
+                    statut = "status_conflict_ia"; 
+                    color = "text-orange-600";
+                }
+            }
+
+            box.innerHTML = `
+                <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Result</div>
+                <div class="text-4xl font-black text-gray-800 tracking-wider mb-2">${codeFinal}</div>
+                <div class="text-2xl font-bold text-legrand mb-4">${(scoreFinal * 100).toFixed(1)}%</div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-6"><div class="bg-legrand h-2 rounded-full" style="width: ${(scoreFinal * 100).toFixed(0)}%"></div></div>
+                <div class="flex flex-col gap-2 text-sm w-full text-left">
+                    <div class="flex justify-between border-b border-gray-200 pb-1"><span class="text-gray-500">${t('result_source')}</span> <span class="font-semibold text-gray-700">${source}</span></div>
+                    <div class="flex justify-between pt-1"><span class="text-gray-500">${t('result_status')}</span> <span class="font-bold ${color} uppercase text-xs">${t(statut)}</span></div>
+                </div>
+            `;
+        });
+
+        function readExcelAsync(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {defval: ""});
+                    resolve(rows);
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        const pauseForUI = () => new Promise(resolve => setTimeout(resolve, 0));
+
+        function findColumnName(row, keywords) {
+            if (!row) return null;
+            const keys = Object.keys(row);
+            for (let kw of keywords) {
+                const kwUpper = kw.toUpperCase().trim();
+                for (let key of keys) {
+                    if (key.toUpperCase().trim().includes(kwUpper)) return key;
+                }
+            }
+            return null;
+        }
+
+        document.getElementById('btn-merge-analyze').addEventListener('click', async () => {
+            const pimFile = document.getElementById('file-pim').files[0];
+            const etimFiles = document.getElementById('files-etim').files;
+            const statusText = document.getElementById('process-status');
+
+            if (!pimFile) { alert(t('alert_select_pim')); return; }
+            if (etimFiles.length === 0) { alert(t('alert_select_etim')); return; }
+
+            statusText.classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            
+            try {
+                statusText.innerText = t('step_1_reading');
+                await pauseForUI(); 
+                let etimMap = new Map();
+                
+                for (let f of etimFiles) {
+                    let rows = await readExcelAsync(f);
+                    if (rows.length === 0) continue;
+                    
+                    let sampleRow = rows[0];
+                    let idColEtim = findColumnName(sampleRow, ['MARQUE', 'ARTICLE', '<ID>', 'ID', 'REFERENCE']) || 'MARQUE';
+                    let featCol = findColumnName(sampleRow, ['FEATUREID', 'FEATURE', 'CARACTERISTIQUE', 'CODE']) || 'FEATUREID';
+                    let valCol = findColumnName(sampleRow, ['FVALUE', 'VALUE', 'VALEUR', 'TEXTE']) || 'FVALUE';
+
+                    for (let r of rows) {
+                        let id = r[idColEtim] ? String(r[idColEtim]).trim() : '';
+                        if (!id) continue;
+                        let feat = (r[featCol] || '') + ": " + (r[valCol] || '');
+                        if (etimMap.has(id)) {
+                            etimMap.set(id, etimMap.get(id) + " | " + feat);
+                        } else {
+                            etimMap.set(id, feat);
+                        }
+                    }
+                }
+
+                statusText.innerText = t('step_2_merging');
+                await pauseForUI(); 
+                let pimRows = await readExcelAsync(pimFile);
+                let rowsToProcess = [];
+
+                if (pimRows.length > 0) {
+                    let sampleRowPim = pimRows[0];
+                    let idColPim = findColumnName(sampleRowPim, ['<ID>', 'ID', 'REFERENCE', 'MARQUE', 'ARTICLE']) || '<ID>';
+                    let codeCol = findColumnName(sampleRowPim, ['CODE DOUANE', 'DOUANE', 'SH', 'HS CODE', 'NOMENCLATURE']); 
+                    let descCol = findColumnName(sampleRowPim, ['LFLG0255', 'LFLG0254', 'DESCRIPTION', 'DESIGNATION', 'LIBELLE']) || 'DESCRIPTION_COMMERCIALE';
+                    let classCol = findColumnName(sampleRowPim, ['CLASS LEGRAND', 'CLASSE', 'HIERARCHY', 'CATEGORY']) || 'Class Legrand';
+
+                    for (let i = 0; i < pimRows.length; i++) {
+                        if (i % 500 === 0) {
+                            statusText.innerText = `${t('step_2_merging')} (${i} / ${pimRows.length})`;
+                            await pauseForUI();
+                        }
+
+                        let r = pimRows[i];
+                        let id = r[idColPim] ? String(r[idColPim]).trim() : '';
+                        if (!id) continue; 
+
+                        let code = codeCol ? r[codeCol] : '';
+                        let etimData = etimMap.get(id) || "";
+                        
+                        r['DESCRIPTION_COMMERCIALE'] = r[descCol] || '';
+                        r['CLASS LEGRAND'] = r[classCol] || '';
+                        r['SPECIFICATIONS_ETIM'] = etimData;
+                        r['CODE DOUANE'] = code ? String(code).trim() : '';
+                        
+                        rowsToProcess.push(r);
+                    }
+                }
+
+                if (rowsToProcess.length === 0) {
+                    statusText.innerText = "0";
+                    return;
+                }
+
+                statusText.innerText = t('step_3_analyzing');
+                await pauseForUI(); 
+                
+                await processInference(rowsToProcess);
+                
+                statusText.innerText = "OK.";
+            } catch (error) {
+                console.error(error);
+                statusText.innerText = "Erreur.";
+            }
+        });
+
+        async function processInference(rows) {
+            const statusText = document.getElementById('process-status');
+            document.getElementById('results').classList.remove('hidden');
+            finalData = [];
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            for (let i = 0; i < rows.length; i++) {
+                if (i % 25 === 0) {
+                    statusText.innerText = `${t('step_3_analyzing')} (${i} / ${rows.length})`;
+                    await pauseForUI();
+                }
+
+                let row = rows[i];
+                let desc = row['DESCRIPTION_COMMERCIALE'] || "";
+                let classe = row['CLASS LEGRAND'] || "";
+                let etim = row['SPECIFICATIONS_ETIM'] || "";
+                let codePIM = row['CODE DOUANE'] || "";
+                
+                let codeFinal = "";
+                let scoreFinal = 0;
+                let statut = "";
+                let statusColor = "";
+
+                let hybrid = await solveHybrid(desc, classe, etim);
+
+                if (hybrid) {
+                    codeFinal = hybrid.code;
+                    scoreFinal = hybrid.score; 
+                    statut = "status_certified_rule";
+                    statusColor = "text-green-700";
+                } else {
+                    let etimBoost = etim.toLowerCase();
+                    const criteres = ['material', 'matiere', 'thermoplastic', 'voltage', 'tension', '230v', 'current', 'courant', 'ampere', 'pole', 'mounting', 'type'];
+                    criteres.forEach(c => { if (etimBoost.includes(c)) etimBoost += ` ${c} ${c} ${c}`; });
+                    const textePIM = `class ${classe} class ${classe} desc ${desc} ${etimBoost}`.trim();
+
+                    let resExp = await runInference(sessionExpert, configExpert, textePIM);
+                    let resEnc = await runInference(sessionEncyclo, configEncyclo, textePIM);
+
+                    codeFinal = resExp.code;
+                    scoreFinal = resExp.score;
+                    statut = "status_certified"; 
+                    statusColor = "text-green-700";
+
+                    if (resExp.code !== resEnc.code) {
+                        statut = "status_conflict_ia"; statusColor = "text-orange-600";
+                        if (resEnc.score > 0.60) { codeFinal = resEnc.code; scoreFinal = resEnc.score; }
+                    } else if (resExp.score < 0.95) {
+                        statut = "status_to_validate"; statusColor = "text-orange-600";
+                    }
+
+                    if (resExp.score < 0.50 && resEnc.score < 0.50) {
+                        statut = "status_human_expert"; statusColor = "text-red-600";
+                    }
+                }
+
+                let diag = "";
+                let normPIM = normaliserCode(codePIM);
+                let normIA = codeFinal;
+
+                if (!normPIM) {
+                    diag = "res_new";
+                } else if (normPIM === normIA) {
+                    diag = "res_match";
+                } else {
+                    let rP6 = normPIM.substring(0, 6); let rI6 = normIA.substring(0, 6);
+                    let rP4 = normPIM.substring(0, 4); let rI4 = normIA.substring(0, 4);
+                    if (rP6 === rI6) {
+                        if (normIA.startsWith("850431") && (normPIM.startsWith("850432") || normPIM.startsWith("850433"))) {
+                            diag = "res_power";
+                        } else {
+                            diag = "res_sub";
+                        }
+                    } else if (rP4 === rI4) {
+                        diag = "res_branch";
+                    } else {
+                        diag = "res_major";
+                    }
+                }
+
+                let newRow = {};
+                let codeInserted = false;
+
+                for (let key in row) {
+                    newRow[key] = row[key];
+                    if (key.toUpperCase().includes('CODE') && key.toUpperCase().includes('DOUANE')) {
+                        newRow['CODE_SH_PREDIT'] = codeFinal;
+                        codeInserted = true;
+                    }
+                }
+                if (!codeInserted) newRow['CODE_SH_PREDIT'] = codeFinal;
+
+                newRow['CONFIANCE_IA_%'] = (scoreFinal * 100).toFixed(2);
+                newRow['STATUT_IA'] = t(statut);
+                newRow['DIAGNOSTIC_AUTOMATIQUE'] = t(diag);
+                finalData.push(newRow);
+
+                if(i < 20) {
+                    tbody.insertAdjacentHTML('beforeend', `
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 ${diag === 'res_major' ? 'bg-red-50' : ''}">
+                            <td class="px-3 py-2 text-xs">
+                                <div class="font-bold text-gray-800 truncate">${desc || t('no_desc')}</div>
+                                <div class="text-gray-500 italic truncate">${classe || '-'}</div>
+                            </td>
+                            <td class="px-3 py-2 font-bold text-gray-800">${codeFinal}</td>
+                            <td class="px-3 py-2 text-gray-600">${(scoreFinal * 100).toFixed(1)}%</td>
+                            <td class="px-3 py-2 font-medium text-xs text-gray-700">${t(diag)}</td>
+                            <td class="px-3 py-2 font-bold text-xs ${statusColor} uppercase">${t(statut)}</td>
+                        </tr>
+                    `);
+                }
+            }
+            document.getElementById('count-total').innerText = rows.length;
+        }
+
+        document.getElementById('btn-export').addEventListener('click', async () => {
+            const workbook = new ExcelJS.Workbook();
+            workbook.creator = 'Legrand Master Data';
+            
+            const wsAll = workbook.addWorksheet('1_All_Predictions');
+            const wsConflicts = workbook.addWorksheet('2_Conflicts');
+            const wsNew = workbook.addWorksheet('3_New_Products');
+
+            if(finalData.length === 0) return;
+            
+            const colsToRemove = [
+                'SPECIFICATIONS_ETIM', 'LFLG0242- Date 1ère commercialisation', 'LFLG0275- Champ libre SBU', 
+                'LFLG0249- Plateau de développement', 'LFLG0299- Etat data technique SBU', 'LFLG0394- SBU MKT Mgr', 
+                'LFLG0301- Etat data marketing SBU', 'LFLG0297- Etat photo principale SBU', 'LFLG0308- WEEE', 
+                'LFLG0032- ROHS compliant (Europ)', 'URL docdif Image Principale', 'Dossier Produits Groupe', 
+                'Dossier Produits Locaux', 'Completeness ETIM', 'LFLG0400- SVHC Produit (REACH Europ)', 
+                'LFLG0300- Etat data reglementaire SBU', 'LFLG0453- SBU Data Manager', 'Source', 
+                'Completeness Model', 'Zone (Contour)', 'Date de modification Statut', 'LFLG0801- Code projet', 
+                'LFLG0802- Famille projet', 'LFLG0803- Nom project optionnel', 'LFLG0804- Nom Projet', 
+                'LFLG0805- Etat PEP SBU', 'LFLG0484- Codification produit de la marque', 'LFLG0498- Categorie Produit', 
+                'LFLG0499- Fonction Produit', 'LFLG0470- Série commerciale', 'LFLG0458- Mecanisme/Accessoire', 
+                'LFLG0460- Coef Reporting Uc/Up', 'Nombre features ETIM', 'LFLG0825- Priorité Contenu'
+            ];
+
+            const exportData = finalData.map(d => {
+                let cleanRow = {...d};
+                colsToRemove.forEach(col => delete cleanRow[col]);
+                return cleanRow;
+            });
+
+            const colHeaders = Object.keys(exportData[0]).map(key => ({ header: key, key: key, width: 22 }));
+            wsAll.columns = colHeaders;
+            wsConflicts.columns = colHeaders;
+            wsNew.columns = colHeaders;
+
+            const styleRow = (row, diagValue, statutValue) => {
+                row.font = { name: 'Calibri', size: 10 };
+                row.border = { top: {style:'thin', color: {argb:'FFEEEEEE'}}, bottom: {style:'thin', color: {argb:'FFEEEEEE'}} };
+                
+                if (statutValue.includes('Humaine') || statutValue.includes('Expertise') || diagValue.includes('Majeur') || diagValue.includes('Major') || diagValue.includes('Maggiore')) {
+                    row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFC7CE' } };
+                    row.font = { name: 'Calibri', size: 10, color: { argb: 'FF9C0006' }, bold: true };
+                } else if (statutValue.includes('valid') || statutValue.includes('Conflit') || statutValue.includes('Conflict') || diagValue.includes('Branch') || diagValue.includes('Power')) {
+                    row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFEB9C' } };
+                    row.font = { name: 'Calibri', size: 10, color: { argb: 'FF9C5700' } };
+                } else if (diagValue.includes('Concordance') || diagValue.includes('Match') || statutValue.includes('Certifi')) {
+                    row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC6EFCE' } };
+                    row.font = { name: 'Calibri', size: 10, color: { argb: 'FF006100' } };
+                } else if (diagValue.includes('Nouveau') || diagValue.includes('New') || diagValue.includes('Nuovo')) {
+                    row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFDDEBF7' } };
+                    row.font = { name: 'Calibri', size: 10, color: { argb: 'FF002060' } };
+                }
+            };
+
+            exportData.forEach(data => {
+                const diag = data['DIAGNOSTIC_AUTOMATIQUE'] || "";
+                const statut = data['STATUT_IA'] || "";
+                let rowAll = wsAll.addRow(data);
+                styleRow(rowAll, diag, statut);
+
+                if (diag.includes('Conflit') || diag.includes('Conflict') || diag.includes('Error') || diag.includes('Erreur') || statut.includes('Expertise') || statut.includes('valid')) {
+                    let rowConf = wsConflicts.addRow(data);
+                    styleRow(rowConf, diag, statut);
+                } else if (diag.includes('Nouveau') || diag.includes('New') || diag.includes('Nuovo')) {
+                    let rowNew = wsNew.addRow(data);
+                    styleRow(rowNew, diag, statut);
+                }
+            });
+
+            [wsAll, wsConflicts, wsNew].forEach(ws => {
+                ws.getRow(1).font = { name: 'Calibri', size: 11, bold: true, color: { argb: 'FFFFFFFF' } };
+                ws.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2C2C2C' } };
+                ws.autoFilter = { from: { row: 1, column: 1 }, to: { row: 1, column: colHeaders.length } };
+                ws.views = [{ state: 'frozen', ySplit: 1 }];
+            });
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, "Diagnostic_PIM_Douane_Legrand.xlsx");
+        });
+    </script>
+</body>
+</html>
